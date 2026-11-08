@@ -10,13 +10,13 @@ import { Repository, DataSource, QueryRunner } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 
-import { Tenant, TenantStatus } from '../../platform/entities/tenant.entity.js';
-import { User, UserRole } from '../../platform/entities/user.entity.js';
-import { Product } from '../../tenant-entities/product.entity.js';
-import { StockMovement } from '../../tenant-entities/stock-movement.entity.js';
-import { Sale } from '../../tenant-entities/sale.entity.js';
-import { SaleItem } from '../../tenant-entities/sale-item.entity.js';
-import { Notification } from '../../tenant-entities/notification.entity.js';
+import { Tenant, TenantStatus } from '../platform/entities/tenant.entity.js';
+import { User, UserRole } from '../platform/entities/user.entity.js';
+import { Product } from '../tenant-entities/product.entity.js';
+import { StockMovement } from '../tenant-entities/stock-movement.entity.js';
+import { Sale } from '../tenant-entities/sale.entity.js';
+import { SaleItem } from '../tenant-entities/sale-item.entity.js';
+import { Notification } from '../tenant-entities/notification.entity.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { JwtService } from '@nestjs/jwt';
@@ -151,7 +151,7 @@ export class AuthService {
     };
 
     const expiresIn = this.configService.get<string>('JWT_EXPIRES_IN', '1d');
-    const accessToken = this.jwtService.sign(payload, { expiresIn });
+    const accessToken = this.jwtService.sign(payload, { expiresIn } as any);
 
     return {
       accessToken,

@@ -6,6 +6,24 @@ export interface AuthenticatedTenantUser {
   tenantId: string;
 }
 
+interface ColumnMetadata {
+  propertyName: string;
+  type: unknown;
+  isPrimary: boolean;
+  isGenerated: boolean;
+  isUnique: boolean;
+  isNullable: boolean;
+}
+
+interface RelationMetadata {
+  propertyName: string;
+  isManyToOne: boolean;
+  isOneToOne: boolean;
+  joinColumns: Array<{ propertyName: string; referencedColumn?: { propertyName: string } }>;
+  inverseEntityMetadata?: { tableName: string };
+  onDelete?: string;
+}
+
 @Injectable()
 export class TenantConnectionService {
   private readonly tenantIdPattern = /^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$/;
@@ -79,10 +97,10 @@ export class TenantConnectionService {
       if (!tableName) continue;
       const quotedTable = this.quoteIdentifier(tableName);
       const columns: string[] = [];
-      for (const column of entity.columns) {
+      for (const column of entity.columns as unknown as ColumnMetadata[]) {
         let colType: string;
         if (column.type === String) colType = 'varchar';
-        else if (column.type === Number && column.primary) colType = 'uuid';
+        else if (column.type === Number && column.isPrimary) colType = 'uuid';
         else if (column.type === Number) colType = 'integer';
         else if (column.type === Date) colType = 'timestamp';
         else if (column.type === Boolean) colType = 'boolean';
@@ -90,24 +108,28 @@ export class TenantConnectionService {
         else colType = 'varchar';
 
         let colDef = `${this.quoteIdentifier(column.propertyName)} ${colType}`;
-        if (column.primary) colDef += ' PRIMARY KEY';
+        if (column.isPrimary) colDef += ' PRIMARY KEY';
         if (column.isGenerated) colDef += ' GENERATED ALWAYS AS IDENTITY';
-        if (column.unique) colDef += ' UNIQUE';
+        if (column.isUnique) colDef += ' UNIQUE';
         if (column.isNullable) colDef += ' NULL';
         else colDef += ' NOT NULL';
         columns.push(colDef);
       }
 
       const fkDefs: string[] = [];
-      for (const rel of entity.relations) {
-        if (rel.foreignTableSchema !== 'tenant') continue;
-        const fkName = this.quoteIdentifier(`fk_${tableName}_${rel.propertyName}`);
-        const fkCol = this.quoteIdentifier(rel.joinColumns[0] ?? rel.propertyName + 'Id');
-        const refTable = this.quoteIdentifier(rel.foreignTableName);
-        const refCol = this.quoteIdentifier(rel.joinColumns[0] ?? 'id');
-        fkDefs.push(
-          `CONSTRAINT ${fkName} FOREIGN KEY (${fkCol}) REFERENCES ${refTable}(${refCol}) ON DELETE ${rel.onDelete ?? 'CASCADE'}`,
-        );
+      for (const rel of entity.relations as unknown as RelationMetadata[]) {
+        if (rel.isManyToOne || rel.isOneToOne) {
+          const fkName = this.quoteIdentifier(`fk_${tableName}_${rel.propertyName}`);
+          const fkColName = rel.joinColumns[0]?.propertyName ?? `${rel.propertyName}Id`;
+          const fkCol = this.quoteIdentifier(fkColName);
+          const refEntity = rel.inverseEntityMetadata;
+          if (!refEntity) continue;
+          const refTable = this.quoteIdentifier(refEntity.tableName);
+          const refCol = this.quoteIdentifier(rel.joinColumns[0]?.referencedColumn?.propertyName ?? 'id');
+          fkDefs.push(
+            `CONSTRAINT ${fkName} FOREIGN KEY (${fkCol}) REFERENCES ${refTable}(${refCol}) ON DELETE ${rel.onDelete ?? 'CASCADE'}`,
+          );
+        }
       }
 
       const sql =
