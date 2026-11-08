@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpException,
-  Inject,
   Post,
   Req,
   UseGuards,
@@ -15,7 +14,7 @@ import { Request } from 'express';
 import { AuthService, UserProfile } from './auth.service.js';
 import { RegisterDto } from '../dto/register.dto.js';
 import { LoginDto } from '../dto/login.dto.js';
-import { JwtAuthGuard } from '../../../auth/jwt-auth.guard.js';
+import { JwtAuthGuard } from '../../../../auth/jwt-auth.guard.js';
 
 interface AuthenticatedRequest extends Request {
   user: {
@@ -33,12 +32,9 @@ export class AuthController {
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   async register(@Body() dto: RegisterDto) {
     try {
-      return await this.authService.register(dto);
-    } catch (error) {
-      throw new HttpException(
-        'Registration failed',
-        500,
-      );
+      return await this authService.register(dto);
+    } catch {
+      throw new HttpException('Registration failed', 500);
     }
   }
 
@@ -62,6 +58,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   async profile(@Req() req: AuthenticatedRequest): Promise<UserProfile> {
     const user = req.user;
-    return this.authService.getProfile(user.userId, user.tenantId);
+    return this authService.getProfile(user.userId, user.tenantId);
   }
 }

@@ -7,9 +7,16 @@ import * as bcrypt from 'bcrypt';
 
 import { Tenant, TenantStatus } from '../entities/tenant.entity.js';
 import { User, UserRole } from '../entities/user.entity.js';
+import { Product } from '../entities/product.entity.js';
+import { StockMovement } from '../entities/stock-movement.entity.js';
+import { Sale } from '../entities/sale.entity.js';
+import { SaleItem } from '../entities/sale-item.entity.js';
+import { Notification } from '../entities/notification.entity.js';
 import { RegisterDto } from '../dto/register.dto.js';
 import { LoginDto } from '../dto/login.dto.js';
 import { JwtService } from '@nestjs/jwt';
+import { DataSource } from 'typeorm';
+import { TenantConnectionService } from '../../../../database/tenant-connection.service.js';
 
 export interface RegisterResult {
   tenantId: string;
@@ -32,6 +39,7 @@ export interface UserProfile {
 @Injectable()
 export class AuthService {
   private readonly bcryptSaltRounds: number;
+  private readonly tenantConnectionService: TenantConnectionService;
 
   constructor(
     @InjectRepository(Tenant)
@@ -40,11 +48,13 @@ export class AuthService {
     private readonly userRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly dataSource: DataSource,
   ) {
     this.bcryptSaltRounds = parseInt(
       this.configService.get<string>('BCRYPT_SALT_ROUNDS', '10'),
       10,
     );
+    this.tenantConnectionService = new TenantConnectionService(dataSource);
   }
 
   async register(dto: RegisterDto): Promise<RegisterResult> {
@@ -61,17 +71,14 @@ export class AuthService {
     await this.tenantRepository.save(tenant);
 
     try {
-      const { TenantConnectionService } = await import(
-        '../../../database/tenant-connection.service.js'
-      );
-      // Create a minimal service instance to use the migration logic
-      // The actual DataSource is shared via NestJS DI, but for schema creation
-      // we use the repository's manager connection
-      const queryRunner = this.tenantRepository.manager.queryRunner;
-      const dataSource = this.tenantRepository.manager.connection;
-
-      const service = new TenantConnectionService(dataSource);
-      await service.createTenantSchema(tenantId);
+      const entities = [
+        this.dataSource.getMetadata(Product),
+        this.dataSource.getMetadata(StockMovement),
+        this.dataSource.getMetadata(Sale),
+        this.dataSource.getMetadata(SaleItem),
+        this.dataSource.getMetadata(Notification),
+      ];
+      await this.tenantConnectionService.createTenantSchema(tenantId, entities);
     } catch (error) {
       await this.tenantRepository.remove(tenant);
       throw error;
