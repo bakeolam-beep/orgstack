@@ -11,7 +11,7 @@ import { StockMovement, StockMovementType } from './entities/stock-movement.enti
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { StockMovementDto } from './dto/stock-movement.dto.js';
-import { TenantConnectionService } from '../../../../database/tenant-connection.service.js';
+import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
 import { RabbitmqProducerService } from './rabbitmq-producer.service.js';
 
 export interface ProductWithStock extends Product {

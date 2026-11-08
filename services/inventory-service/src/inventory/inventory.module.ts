@@ -2,12 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { DataSource } from 'typeorm';
 
 import { Product } from './entities/product.entity.js';
 import { StockMovement } from './entities/stock-movement.entity.js';
 import { InventoryService } from './inventory.service.js';
 import { InventoryController } from './inventory.controller.js';
 import { RabbitmqProducerService } from './rabbitmq-producer.service.js';
+import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
 
 @Module({
   imports: [
@@ -29,7 +31,15 @@ import { RabbitmqProducerService } from './rabbitmq-producer.service.js';
     ]),
   ],
   controllers: [InventoryController],
-  providers: [InventoryService, RabbitmqProducerService],
+  providers: [
+    InventoryService,
+    RabbitmqProducerService,
+    {
+      provide: TenantConnectionService,
+      useFactory: (dataSource: DataSource) => new TenantConnectionService(dataSource),
+      inject: [DataSource],
+    },
+  ],
   exports: [InventoryService],
 })
 export class InventoryModule {}
