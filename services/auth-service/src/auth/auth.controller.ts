@@ -13,7 +13,7 @@ import { Request } from 'express';
 import { AuthService, UserProfile } from './auth.service.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
-import { JwtAuthGuard } from '@orgstack/auth';
+import { JwtAuthGuard } from '../shared/auth/jwt-auth.guard.js';
 
 interface AuthenticatedRequest extends Request {
   user: {

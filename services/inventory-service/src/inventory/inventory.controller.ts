@@ -17,7 +17,7 @@ import { InventoryService } from './inventory.service.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { StockMovementDto } from './dto/stock-movement.dto.js';
-import { JwtAuthGuard } from '@orgstack/auth';
+import { JwtAuthGuard } from '../../../../auth/jwt-auth.guard.js';
 
 interface AuthenticatedRequest extends Request {
   user: {

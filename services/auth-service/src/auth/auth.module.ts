@@ -8,7 +8,7 @@ import { Tenant } from '../platform/entities/tenant.entity.js';
 import { User } from '../platform/entities/user.entity.js';
 import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
-import { JwtStrategy } from '@orgstack/auth';
+import { JwtStrategy } from '../../../../auth/jwt.strategy.js';
 
 @Module({
   imports: [

@@ -20,7 +20,7 @@ import { Notification } from '../tenant-entities/notification.entity.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { JwtService } from '@nestjs/jwt';
-import { TenantConnectionService } from '@orgstack/database';
+import { TenantConnectionService } from '../../../../database/tenant-connection.service.js';
 
 export interface RegisterResult {
   tenantId: string;
