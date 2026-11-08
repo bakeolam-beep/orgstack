@@ -1,22 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource, QueryRunner } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import * as bcrypt from 'bcrypt';
 
-import { Tenant, TenantStatus } from '../entities/tenant.entity.js';
-import { User, UserRole } from '../entities/user.entity.js';
-import { Product } from '../entities/product.entity.js';
-import { StockMovement } from '../entities/stock-movement.entity.js';
-import { Sale } from '../entities/sale.entity.js';
-import { SaleItem } from '../entities/sale-item.entity.js';
-import { Notification } from '../entities/notification.entity.js';
-import { RegisterDto } from '../dto/register.dto.js';
-import { LoginDto } from '../dto/login.dto.js';
+import { Tenant, TenantStatus } from '../../platform/entities/tenant.entity.js';
+import { User, UserRole } from '../../platform/entities/user.entity.js';
+import { Product } from '../../tenant-entities/product.entity.js';
+import { StockMovement } from '../../tenant-entities/stock-movement.entity.js';
+import { Sale } from '../../tenant-entities/sale.entity.js';
+import { SaleItem } from '../../tenant-entities/sale-item.entity.js';
+import { Notification } from '../../tenant-entities/notification.entity.js';
+import { RegisterDto } from './dto/register.dto.js';
+import { LoginDto } from './dto/login.dto.js';
 import { JwtService } from '@nestjs/jwt';
-import { DataSource } from 'typeorm';
-import { TenantConnectionService } from '../../../../database/tenant-connection.service.js';
+import { TenantConnectionService } from '@orgstack/database';
 
 export interface RegisterResult {
   tenantId: string;
@@ -31,6 +35,7 @@ export interface LoginResult {
 }
 
 export interface UserProfile {
+  id: string;
   email: string;
   role: UserRole;
   tenantName: string;
@@ -58,19 +63,31 @@ export class AuthService {
   }
 
   async register(dto: RegisterDto): Promise<RegisterResult> {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: dto.adminEmail.toLowerCase() },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Email already registered');
+    }
+
     const tenantId = uuidv4();
     const schemaName = `tenant_${tenantId}`;
 
-    const tenant = this.tenantRepository.create({
-      id: tenantId,
-      name: dto.businessName,
-      schemaName,
-      status: TenantStatus.ACTIVE,
-    });
-
-    await this.tenantRepository.save(tenant);
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
     try {
+      const tenant = this.tenantRepository.create({
+        id: tenantId,
+        name: dto.businessName,
+        schemaName,
+        status: TenantStatus.ACTIVE,
+      });
+
+      await queryRunner.manager.save(tenant);
+
       const entities = [
         this.dataSource.getMetadata(Product),
         this.dataSource.getMetadata(StockMovement),
@@ -78,29 +95,34 @@ export class AuthService {
         this.dataSource.getMetadata(SaleItem),
         this.dataSource.getMetadata(Notification),
       ];
-      await this.tenantConnectionService.createTenantSchema(tenantId, entities);
+
+      await this.tenantConnectionService.createTenantSchema(schemaName, entities);
+
+      const passwordHash = await bcrypt.hash(dto.adminPassword, this.bcryptSaltRounds);
+
+      const user = this.userRepository.create({
+        id: uuidv4(),
+        email: dto.adminEmail.toLowerCase(),
+        passwordHash,
+        tenantId,
+        role: UserRole.ADMIN,
+      });
+
+      const savedUser = await queryRunner.manager.save(user);
+
+      await queryRunner.commitTransaction();
+
+      return {
+        tenantId: savedUser.tenantId,
+        userId: savedUser.id,
+        email: savedUser.email,
+      };
     } catch (error) {
-      await this.tenantRepository.remove(tenant);
-      throw error;
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException('Registration failed');
+    } finally {
+      await queryRunner.release();
     }
-
-    const passwordHash = await bcrypt.hash(dto.adminPassword, this.bcryptSaltRounds);
-
-    const user = this.userRepository.create({
-      id: uuidv4(),
-      email: dto.email.toLowerCase(),
-      passwordHash,
-      tenantId,
-      role: UserRole.ADMIN,
-    });
-
-    const savedUser = await this.userRepository.save(user);
-
-    return {
-      tenantId: savedUser.tenantId,
-      userId: savedUser.id,
-      email: savedUser.email,
-    };
   }
 
   async login(dto: LoginDto): Promise<LoginResult> {
@@ -110,16 +132,16 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     const passwordValid = await bcrypt.compare(dto.password, user.passwordHash);
     if (!passwordValid) {
-      throw new Error('Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     if (user.tenant.status !== TenantStatus.ACTIVE) {
-      throw new Error('Account suspended');
+      throw new UnauthorizedException('Account suspended');
     }
 
     const payload = {
@@ -138,17 +160,18 @@ export class AuthService {
     };
   }
 
-  async getProfile(userId: string, tenantId: string): Promise<UserProfile> {
+  async getProfile(userId: string): Promise<UserProfile> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: { tenant: true },
     });
 
-    if (!user || user.tenantId !== tenantId) {
-      throw new Error('User not found');
+    if (!user) {
+      throw new UnauthorizedException('User not found');
     }
 
     return {
+      id: user.id,
       email: user.email,
       role: user.role,
       tenantName: user.tenant.name,
