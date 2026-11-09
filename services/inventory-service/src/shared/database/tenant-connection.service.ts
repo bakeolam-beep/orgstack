@@ -111,11 +111,11 @@ export class TenantConnectionService {
         else if (column.type === Number) colType = 'integer';
         else if (column.type === Date) colType = 'timestamp';
         else if (column.type === Boolean) colType = 'boolean';
-        else if (typeof column.type === 'string' && column.enum && Array.isArray(column.enum) && column.enum.length > 0) {
+else if (typeof column.type === 'string' && column.enum && Array.isArray(column.enum) && column.enum.length > 0) {
           // Handle enum columns - create PostgreSQL enum type
-          const enumName = `${tableName}_${column.propertyName}_enum`;
-          const enumValues = column.enum.map(v => `'${v}'`).join(', ');
-          enumTypesToCreate.set(enumName, column.enum);
+          const enumName = `${tableName}_${column.propertyName}_enum`.toLowerCase();
+          const enumValues = column.enum as string[];
+          enumTypesToCreate.set(enumName, enumValues);
           colType = enumName;
         }
         else if (typeof column.type === 'string') colType = column.type;
@@ -139,9 +139,10 @@ export class TenantConnectionService {
       // Create enum types first
       for (const [enumName, enumValues] of enumTypesToCreate) {
         const quotedEnumName = this.quoteIdentifier(enumName);
-        const enumValuesStr = enumValues.map(v => `'${v}'`).join(', ');
+        const quoteLiteral = (value: unknown) => `'${String(value).replace(/'/g, "''")}'`;
+        const enumValuesStr = enumValues.map(quoteLiteral).join(', ');
         await _queryRunner.query(
-          `DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = ${_queryRunner.connection.escape(enumName)}) THEN CREATE TYPE ${quotedEnumName} AS ENUM (${enumValuesStr}); END IF; END $$;`
+          `DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = ${quoteLiteral(enumName)}) THEN CREATE TYPE ${quotedEnumName} AS ENUM (${enumValuesStr}); END IF; END $$;`
         );
       }
 

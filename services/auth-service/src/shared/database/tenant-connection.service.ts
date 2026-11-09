@@ -113,7 +113,7 @@ export class TenantConnectionService {
         else if (column.type === Boolean) colType = 'boolean';
         else if (typeof column.type === 'string' && column.enum && Array.isArray(column.enum) && column.enum.length > 0) {
           // Handle enum columns - create PostgreSQL enum type
-          const enumName = `${tableName}_${column.propertyName}_enum`;
+          const enumName = `${tableName}_${column.propertyName}_enum`.toLowerCase();
           const enumValues = column.enum as string[];
           enumTypesToCreate.set(enumName, enumValues);
           colType = enumName;
