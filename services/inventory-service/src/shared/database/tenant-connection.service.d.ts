@@ -1,18 +1,11 @@
-import { DataSource, EntityMetadata, QueryRunner } from "typeorm";
-export interface AuthenticatedTenantUser {
-    userId: string;
-    tenantId: string;
-}
+﻿export interface AuthenticatedTenantUser { userId: string; tenantId: string; }
 export declare class TenantConnectionService {
-    private readonly dataSource;
-    private readonly tenantIdPattern;
-    constructor(dataSource: DataSource);
-    validateTenantId(tenantId: unknown): string;
-    getTenantSchema(tenantId: unknown): string;
-    quoteIdentifier(identifier: string): string;
-    withTenantScope<T>(tenantId: unknown, operation: (queryRunner: QueryRunner, schema: string) => Promise<T>, options?: {
-        includePlatformSchema?: boolean;
-    }): Promise<T>;
-    createTenantSchema(tenantId: unknown, entities?: EntityMetadata[]): Promise<void>;
-    runTenantTableMigrations(_queryRunner: QueryRunner, _quotedSchema: string, entities: EntityMetadata[]): Promise<void>;
+  constructor(dataSource: any);
+  validateTenantId(tenantId: unknown): string;
+  getTenantSchema(tenantId: unknown): string;
+  quoteIdentifier(identifier: string): string;
+  withTenantScope<T>(tenantId: unknown, operation: (queryRunner: any, schema: string) => Promise<T>, options?: { includePlatformSchema?: boolean }): Promise<T>;
+  createTenantSchema(tenantId: unknown, entities?: any[]): Promise<void>;
+  ensureTenantTables(queryRunner: any, quotedSchema: string, entities: any[]): Promise<void>;
+  runTenantTableMigrations(queryRunner: any, quotedSchema: string, entities: any[]): Promise<void>;
 }
