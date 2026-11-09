@@ -139,6 +139,8 @@ export class TenantConnectionService {
         } else if (column.default !== undefined && column.default !== null) {
           if (typeof column.default === 'function') {
             defaultValue = `DEFAULT ${column.default()}`;
+          } else if (typeof column.default === 'string') {
+            defaultValue = `DEFAULT '${String(column.default).replace(/'/g, "''")}'`;
           } else {
             defaultValue = `DEFAULT ${column.default}`;
           }
