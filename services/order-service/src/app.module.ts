@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
+
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { OrderModule } from './order/order.module.js';
 
 @Module({
   imports: [
@@ -25,6 +27,7 @@ import { AppService } from './app.service.js';
         synchronize: false,
       }),
     }),
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],
