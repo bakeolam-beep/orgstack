@@ -6,13 +6,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { Tenant } from '../platform/entities/tenant.entity.js';
 import { User } from '../platform/entities/user.entity.js';
+import { Product } from '../tenant-entities/product.entity.js';
+import { StockMovement } from '../tenant-entities/stock-movement.entity.js';
+import { Sale } from '../tenant-entities/sale.entity.js';
+import { SaleItem } from '../tenant-entities/sale-item.entity.js';
+import { Notification } from '../tenant-entities/notification.entity.js';
 import { AuthService } from './auth.service.js';
 import { AuthController } from './auth.controller.js';
 import { JwtStrategy } from '../shared/auth/jwt.strategy.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Tenant, User]),
+    TypeOrmModule.forFeature([Tenant, User, Product, StockMovement, Sale, SaleItem, Notification]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

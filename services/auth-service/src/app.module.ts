@@ -5,8 +5,6 @@ import { join } from 'node:path';
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
-import { Tenant } from './platform/entities/tenant.entity.js';
-import { User } from './platform/entities/user.entity.js';
 import { DatabaseInitService } from './database-init.service.js';
 import { AuthModule } from './auth/auth.module.js';
 
@@ -30,7 +28,6 @@ import { AuthModule } from './auth/auth.module.js';
         synchronize: false,
       }),
     }),
-    TypeOrmModule.forFeature([Tenant, User]),
     AuthModule,
   ],
   controllers: [AppController],

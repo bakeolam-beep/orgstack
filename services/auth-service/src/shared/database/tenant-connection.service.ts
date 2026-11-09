@@ -99,8 +99,12 @@ export class TenantConnectionService {
       const columns: string[] = [];
       for (const column of entity.columns as unknown as ColumnMetadata[]) {
         let colType: string;
+        let isUuidPrimary = false;
         if (column.type === String) colType = 'varchar';
-        else if (column.type === Number && column.isPrimary) colType = 'uuid';
+        else if ((column.type === Number || column.type === 'uuid' || column.type === 'UUID') && column.isPrimary) {
+          colType = 'uuid';
+          isUuidPrimary = true;
+        }
         else if (column.type === Number) colType = 'integer';
         else if (column.type === Date) colType = 'timestamp';
         else if (column.type === Boolean) colType = 'boolean';
@@ -109,7 +113,13 @@ export class TenantConnectionService {
 
         let colDef = `${this.quoteIdentifier(column.propertyName)} ${colType}`;
         if (column.isPrimary) colDef += ' PRIMARY KEY';
-        if (column.isGenerated) colDef += ' GENERATED ALWAYS AS IDENTITY';
+        if (column.isGenerated) {
+          if (isUuidPrimary) {
+            colDef += ' DEFAULT gen_random_uuid()';
+          } else {
+            colDef += ' GENERATED ALWAYS AS IDENTITY';
+          }
+        }
         if (column.isUnique) colDef += ' UNIQUE';
         if (column.isNullable) colDef += ' NULL';
         else colDef += ' NOT NULL';
