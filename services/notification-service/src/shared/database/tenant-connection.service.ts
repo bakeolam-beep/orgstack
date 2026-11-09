@@ -93,6 +93,31 @@ export class TenantConnectionService {
     }
   }
 
+  async ensureTenantTables(
+    tenantId: unknown,
+    entities: EntityMetadata[] = [],
+  ): Promise<void> {
+    const schema = this.getTenantSchema(tenantId);
+    const quotedSchema = this.quoteIdentifier(schema);
+    const searchPath = `${quotedSchema}, public`;
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      await queryRunner.query(`CREATE SCHEMA IF NOT EXISTS ${quotedSchema}`);
+      await queryRunner.query(`SET search_path TO ${searchPath}`);
+      await this.runTenantTableMigrations(queryRunner, quotedSchema, entities);
+      await this.syncTableColumns(queryRunner, quotedSchema, entities);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
   async runTenantTableMigrations(
     _queryRunner: QueryRunner,
     _quotedSchema: string,
@@ -179,6 +204,63 @@ export class TenantConnectionService {
       const allConstraints = [...columns, ...fkDefs, ...checkConstraints];
       const sql = `CREATE TABLE IF NOT EXISTS ${quotedTable} (${allConstraints.join(', ')})`;
       await _queryRunner.query(sql);
+    }
+  }
+
+  private async syncTableColumns(
+    queryRunner: QueryRunner,
+    _quotedSchema: string,
+    entities: EntityMetadata[],
+  ): Promise<void> {
+    for (const entity of entities) {
+      const tableName = entity.tableName;
+      if (!tableName) continue;
+      const quotedTable = this.quoteIdentifier(tableName);
+
+      const existingColumnsResult = await queryRunner.query(`
+        SELECT column_name 
+        FROM information_schema.columns 
+        WHERE table_name = $1 AND table_schema = CURRENT_SCHEMA()
+      `, [tableName]);
+
+      const existingColumns = new Set(existingColumnsResult.map((row: any) => row.column_name));
+
+      for (const column of entity.columns as unknown as ColumnMetadata[]) {
+        const columnName = column.propertyName;
+        if (!existingColumns.has(columnName)) {
+          let colType: string;
+          if (column.type === String) colType = 'varchar';
+          else if ((column.type === Number || column.type === 'uuid' || column.type === 'UUID') && column.isPrimary) {
+            colType = 'uuid';
+          }
+          else if (column.type === Number) colType = 'integer';
+          else if (column.type === Date) colType = 'timestamp';
+          else if (column.type === Boolean) colType = 'boolean';
+          else if (typeof column.type === 'string' && column.enum && Array.isArray(column.enum) && column.enum.length > 0) {
+            colType = 'varchar';
+          }
+          else if (typeof column.type === 'string') colType = column.type;
+          else colType = 'varchar';
+
+          const quotedColumn = this.quoteIdentifier(columnName);
+          let alterSql = `ALTER TABLE ${quotedTable} ADD COLUMN ${quotedColumn} ${colType}`;
+          if (!column.isNullable) {
+            alterSql += ' NOT NULL';
+          }
+          if (column.default !== undefined && column.default !== null) {
+            if (typeof column.default === 'function') {
+              alterSql += ` DEFAULT ${column.default()}`;
+            } else if (typeof column.default === 'string') {
+              alterSql += ` DEFAULT '${String(column.default).replace(/'/g, "''")}'`;
+            } else {
+              alterSql += ` DEFAULT ${column.default}`;
+            }
+          } else if (!column.isNullable) {
+            alterSql += ' DEFAULT \'\'';
+          }
+          await queryRunner.query(alterSql);
+        }
+      }
     }
   }
 }

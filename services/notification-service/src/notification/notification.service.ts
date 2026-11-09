@@ -26,34 +26,23 @@ export class NotificationService implements OnModuleInit {
   }
 
   async onModuleInit() {
-    // Ensure notification table exists for all tenants on startup
   }
 
   async ensureTenantSchema(tenantId: string): Promise<void> {
-    console.log('[NotificationService] ensureTenantSchema called for tenant:', tenantId);
     try {
-      await this.tenantConnectionService.createTenantSchema(tenantId, [this.notificationMetadata]);
-      console.log('[NotificationService] Tenant schema created for:', tenantId);
+      await this.tenantConnectionService.ensureTenantTables(tenantId, [this.notificationMetadata]);
     } catch (error) {
-      console.error('[NotificationService] Failed to create tenant schema for', tenantId, ':', error);
+      console.error(`[NotificationService] Failed to ensure tenant schema for ${tenantId}:`, error);
     }
   }
 
   async getNotifications(tenantId: string): Promise<NotificationResult[]> {
-    console.log('[NotificationService] getNotifications called for tenant:', tenantId);
     await this.ensureTenantSchema(tenantId);
     return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner: QueryRunner) => {
-      console.log('[NotificationService] Executing query for notifications');
-      try {
-        const result = await queryRunner.query(
-          `SELECT id, type, title, message, metadata, "isRead", "createdAt" FROM "notifications" ORDER BY "createdAt" DESC`,
-        );
-        console.log('[NotificationService] Query result:', result);
-        return result as NotificationResult[];
-      } catch (error) {
-        console.error('[NotificationService] Query error:', error);
-        throw error;
-      }
+      const result = await queryRunner.query(
+        `SELECT id, type, title, message, metadata, "isRead", "createdAt" FROM "notifications" ORDER BY "createdAt" DESC`,
+      );
+      return result as NotificationResult[];
     });
   }
 
