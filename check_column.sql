@@ -1,1 +1,0 @@
-SELECT column_name FROM information_schema.columns WHERE table_schema = 'tenant_379a3d3b-710c-4ee8-8d2f-0044aa8805d2' AND table_name = 'sales' AND column_name LIKE '%paystack%';
