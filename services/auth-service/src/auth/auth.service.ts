@@ -26,10 +26,11 @@ export interface RegisterResult {
   tenantId: string;
   userId: string;
   email: string;
+  access_token: string;
 }
 
 export interface LoginResult {
-  accessToken: string;
+  access_token: string;
   tenantId: string;
   role: UserRole;
 }
@@ -112,10 +113,21 @@ export class AuthService {
 
       await queryRunner.commitTransaction();
 
+      const payload = {
+        userId: savedUser.id,
+        tenantId: savedUser.tenantId,
+        role: UserRole.ADMIN,
+      };
+
+      const cfg = this.configService as ConfigService | undefined;
+      const expiresIn = cfg?.get?.('JWT_EXPIRES_IN') ?? process.env.JWT_EXPIRES_IN ?? '1d';
+      const accessToken = this.jwtService.sign(payload, { expiresIn } as any);
+
       return {
         tenantId: savedUser.tenantId,
         userId: savedUser.id,
         email: savedUser.email,
+        access_token: accessToken,
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -156,7 +168,7 @@ export class AuthService {
     const accessToken = this.jwtService.sign(payload, { expiresIn } as any);
 
     return {
-      accessToken,
+      access_token: accessToken,
       tenantId: user.tenantId,
       role: user.role,
     };
