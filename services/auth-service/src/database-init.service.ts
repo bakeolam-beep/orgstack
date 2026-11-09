@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+﻿import { Injectable, OnModuleInit } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -6,10 +6,15 @@ export class DatabaseInitService implements OnModuleInit {
   constructor(private readonly dataSource: DataSource) {}
 
   async onModuleInit() {
-    await this.initialize();
+    try {
+      await this.initialize();
+    } catch (e) {
+      console.error('[DatabaseInitService] init skipped:', (e as Error)?.message ?? e);
+    }
   }
 
   async initialize(): Promise<void> {
+    if (!this.dataSource?.createQueryRunner) return;
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     try {

@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+﻿import { Injectable, OnModuleInit } from '@nestjs/common';
 import { DataSource, QueryRunner, EntityMetadata } from 'typeorm';
 import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
 import { MarkReadDto } from './dto/mark-read.dto.js';
@@ -16,21 +16,30 @@ export interface NotificationResult {
 
 @Injectable()
 export class NotificationService implements OnModuleInit {
-  private notificationMetadata: EntityMetadata;
+  private notificationMetadata: EntityMetadata | null = null;
 
   constructor(
     private readonly dataSource: DataSource,
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {
-    this.notificationMetadata = this.dataSource.getMetadata(Notification);
+  ) {}
+
+  private getMetadataSafe(): EntityMetadata | null {
+    if (this.notificationMetadata) return this.notificationMetadata;
+    try {
+      this.notificationMetadata = this.dataSource?.getMetadata?.(Notification) ?? null;
+    } catch {
+      this.notificationMetadata = null;
+    }
+    return this.notificationMetadata;
   }
 
-  async onModuleInit() {
-  }
+  async onModuleInit() {}
 
   async ensureTenantSchema(tenantId: string): Promise<void> {
+    const meta = this.getMetadataSafe();
+    if (!meta) return;
     try {
-      await this.tenantConnectionService.ensureTenantTables(tenantId, [this.notificationMetadata]);
+      await this.tenantConnectionService.ensureTenantTables(tenantId, [meta]);
     } catch (error) {
       console.error(`[NotificationService] Failed to ensure tenant schema for ${tenantId}:`, error);
     }
@@ -68,7 +77,7 @@ export class NotificationService implements OnModuleInit {
         `UPDATE "notifications" SET "isRead" = true WHERE id IN (${placeholders})`,
         dto.notificationIds,
       );
-      return { updated: result?.rowCount || 0 };
+      return { updated: result?.rowCount || result?.[1] || 0 };
     });
   }
 
@@ -78,7 +87,7 @@ export class NotificationService implements OnModuleInit {
       const result = await queryRunner.query(
         `UPDATE "notifications" SET "isRead" = true WHERE "isRead" = false`,
       );
-      return { updated: result?.rowCount || 0 };
+      return { updated: result?.rowCount || result?.[1] || 0 };
     });
   }
 

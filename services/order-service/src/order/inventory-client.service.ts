@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+﻿import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
@@ -13,7 +13,9 @@ export class InventoryClientService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {
-    this.inventoryBaseUrl = this.configService.get<string>('INVENTORY_SERVICE_URL', 'http://localhost:3002');
+    const cfg = this.configService as ConfigService | undefined;
+    this.inventoryBaseUrl =
+      cfg?.get?.('INVENTORY_SERVICE_URL') ?? process.env.INVENTORY_SERVICE_URL ?? 'http://localhost:3002';
   }
 
   async deductStock(tenantId: string, productId: string, quantity: number, saleReference: string, bearerToken: string) {

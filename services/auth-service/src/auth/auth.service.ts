@@ -1,4 +1,4 @@
-import {
+﻿import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
@@ -55,8 +55,9 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly dataSource: DataSource,
   ) {
+    const cfg = this.configService as ConfigService | undefined;
     this.bcryptSaltRounds = parseInt(
-      this.configService.get<string>('BCRYPT_SALT_ROUNDS', '10'),
+      cfg?.get?.('BCRYPT_SALT_ROUNDS') ?? process.env.BCRYPT_SALT_ROUNDS ?? '10',
       10,
     );
     this.tenantConnectionService = new TenantConnectionService(dataSource);
@@ -150,7 +151,8 @@ export class AuthService {
       role: user.role,
     };
 
-    const expiresIn = this.configService.get<string>('JWT_EXPIRES_IN', '1d');
+    const cfg = this.configService as ConfigService | undefined;
+    const expiresIn = cfg?.get?.('JWT_EXPIRES_IN') ?? process.env.JWT_EXPIRES_IN ?? '1d';
     const accessToken = this.jwtService.sign(payload, { expiresIn } as any);
 
     return {

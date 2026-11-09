@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+﻿import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
@@ -14,7 +14,8 @@ export class PaystackService {
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {
-    this.secretKey = this.configService.get<string>('PAYSTACK_SECRET_KEY', '');
+    const cfg = this.configService as ConfigService | undefined;
+    this.secretKey = cfg?.get?.('PAYSTACK_SECRET_KEY') ?? process.env.PAYSTACK_SECRET_KEY ?? '';
   }
 
   async initializePayment(email: string, amountInKobo: number, saleReference: string) {
