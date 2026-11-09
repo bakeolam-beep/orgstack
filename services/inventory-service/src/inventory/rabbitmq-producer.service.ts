@@ -1,6 +1,5 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface LowStockEventPayload {
@@ -15,26 +14,8 @@ export interface LowStockEventPayload {
 }
 
 @Injectable()
-export class RabbitmqProducerService implements OnModuleInit, OnModuleDestroy {
-  private client: ClientProxy;
-
-  constructor(private readonly configService: ConfigService) {}
-
-  onModuleInit() {
-    const rabbitmqUrl = this.configService.get<string>('RABBITMQ_URL', 'amqp://localhost:5672');
-    this.client = ClientProxyFactory.create({
-      transport: Transport.RMQ,
-      options: {
-        urls: [rabbitmqUrl],
-        queue: 'low_stock_alerts',
-        queueOptions: { durable: true },
-      },
-    });
-  }
-
-  onModuleDestroy() {
-    this.client.close();
-  }
+export class RabbitmqProducerService {
+  constructor(@Inject('RABBITMQ_SERVICE') private readonly client: ClientProxy) {}
 
   publishLowStockEvent(
     tenantId: string,

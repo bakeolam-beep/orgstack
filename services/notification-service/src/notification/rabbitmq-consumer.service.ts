@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { EventPattern, Payload } from '@nestjs/microservices';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { EventPattern, Payload, Ctx } from '@nestjs/microservices';
+import { RmqContext } from '@nestjs/microservices';
 import { DataSource, QueryRunner } from 'typeorm';
 import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
 
@@ -15,17 +16,24 @@ export interface LowStockEventPayload {
 }
 
 @Injectable()
-export class RabbitmqConsumerService {
+export class RabbitmqConsumerService implements OnModuleInit {
   private readonly logger = new Logger(RabbitmqConsumerService.name);
   private readonly retryCounts = new Map<string, number>();
 
   constructor(
     private readonly dataSource: DataSource,
     private readonly tenantConnectionService: TenantConnectionService,
-  ) {}
+  ) {
+    this.logger.log('RabbitmqConsumerService constructor called');
+  }
+
+  onModuleInit() {
+    this.logger.log('RabbitmqConsumerService onModuleInit called');
+  }
 
   @EventPattern('low_stock_alerts')
-  async handleLowStockEvent(@Payload() payload: any): Promise<void> {
+  async handleLowStockEvent(@Payload() payload: any, @Ctx() context: RmqContext): Promise<void> {
+    this.logger.log(`handleLowStockEvent called with payload: ${JSON.stringify(payload)}`);
     const requiredFields = [
       'eventId',
       'eventType',
@@ -42,11 +50,17 @@ export class RabbitmqConsumerService {
       this.logger.warn(
         `Low stock event missing required fields: ${missingFields.join(', ')}. Event: ${JSON.stringify(payload)}`,
       );
+      const channel = context.getChannelRef();
+      const originalMsg = context.getMessage();
+      channel.ack(originalMsg);
       return;
     }
 
     if (payload.eventType !== 'LOW_STOCK') {
       this.logger.warn(`Received unexpected event type: ${payload.eventType}. Expected LOW_STOCK.`);
+      const channel = context.getChannelRef();
+      const originalMsg = context.getMessage();
+      channel.ack(originalMsg);
       return;
     }
 
@@ -85,10 +99,13 @@ export class RabbitmqConsumerService {
           `Low stock event ${eventId} has failed 3 times. Moving to dead-letter log. Payload: ${JSON.stringify(payload)}`,
         );
         this.retryCounts.delete(eventId);
-        return;
       }
 
       throw error;
+    } finally {
+      const channel = context.getChannelRef();
+      const originalMsg = context.getMessage();
+      channel.ack(originalMsg);
     }
   }
 }
