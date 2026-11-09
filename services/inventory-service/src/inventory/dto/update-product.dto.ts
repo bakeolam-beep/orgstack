@@ -17,7 +17,12 @@ export class UpdateProductDto {
   @IsNumber()
   @Min(0)
   @IsOptional()
-  unitPrice?: number;
+  price?: number;
+
+  @IsNumber()
+  @Min(0)
+  @IsOptional()
+  quantity?: number;
 
   @IsNumber()
   @Min(0)

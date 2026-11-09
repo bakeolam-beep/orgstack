@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-const RegisterPage = () => {
+export const Register = () => {
   const [businessName, setBusinessName] = useState('');
   const [adminEmail, setAdminEmail] = useState('');
   const [adminPassword, setAdminPassword] = useState('');
@@ -39,80 +39,91 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-header">
-          <h1>OrgStack</h1>
-          <p>Create your business account</p>
-        </div>
-
-        {error && <div className="alert alert-error">{error}</div>}
-
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="businessName">Business Name</label>
-            <input
-              type="text"
-              id="businessName"
-              value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Enter your business name"
-            />
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+      <div className="max-w-md w-full">
+        <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-slate-900">OrgStack</h1>
+            <p className="text-slate-500 text-sm">Create your business account</p>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="adminEmail">Admin Email</label>
-            <input
-              type="email"
-              id="adminEmail"
-              value={adminEmail}
-              onChange={(e) => setAdminEmail(e.target.value)}
-              required
+          {error && (
+            <div className="mb-6 rounded-xl bg-red-50 border border-red-200 p-4 text-red-700 text-sm">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Business Name</label>
+              <input
+                type="text"
+                id="businessName"
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+                required
+                disabled={loading}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all disabled:bg-slate-100"
+                placeholder="Enter your business name"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Admin Email</label>
+              <input
+                type="email"
+                id="adminEmail"
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                required
+                disabled={loading}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all disabled:bg-slate-100"
+                placeholder="Enter admin email"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Password</label>
+              <input
+                type="password"
+                id="adminPassword"
+                value={adminPassword}
+                onChange={(e) => setAdminPassword(e.target.value)}
+                required
+                minLength={6}
+                disabled={loading}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all disabled:bg-slate-100"
+                placeholder="Enter password"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-slate-700">Confirm Password</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                disabled={loading}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg text-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all disabled:bg-slate-100"
+                placeholder="Confirm password"
+              />
+            </div>
+            <button
+              type="submit"
               disabled={loading}
-              placeholder="Enter admin email"
-            />
-          </div>
+              className="w-full py-3 px-4 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
+          </form>
 
-          <div className="form-group">
-            <label htmlFor="adminPassword">Password</label>
-            <input
-              type="password"
-              id="adminPassword"
-              value={adminPassword}
-              onChange={(e) => setAdminPassword(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Enter password (min 6 characters)"
-              minLength={6}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              disabled={loading}
-              placeholder="Confirm password"
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary btn-block" disabled={loading}>
-            {loading ? 'Creating account...' : 'Create Account'}
-          </button>
-        </form>
-
-        <div className="auth-footer">
-          <p>Already have an account? <Link to="/login">Sign in</Link></p>
+          <p className="mt-6 text-center text-sm text-slate-500">
+            Already have an account?{' '}
+            <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+              Sign in
+            </Link>
+          </p>
         </div>
       </div>
     </div>
   );
 };
-
-export default RegisterPage;

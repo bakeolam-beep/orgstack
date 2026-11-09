@@ -1,41 +1,31 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';
-import Layout from './components/Layout';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import Dashboard from './pages/Dashboard';
-import ProductsPage from './pages/ProductsPage';
-import StockPage from './pages/StockPage';
-import SalesPage from './pages/SalesPage';
-import NotificationsPage from './pages/NotificationsPage';
-import ReportsPage from './pages/ReportsPage';
+import { Layout } from './components/Layout';
+import { Dashboard } from './pages/Dashboard';
+import { Inventory } from './pages/Inventory';
+import { Orders } from './pages/Orders';
+import { Notifications } from './pages/Notifications';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
-};
+export function App() {
+  const token = localStorage.getItem('token');
+  const isAuthenticated = !!token;
 
-const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated } = useAuth();
-  return isAuthenticated ? <Navigate to="/" replace /> : <>{children}</>;
-};
-
-function App() {
   return (
     <Routes>
-      <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-      <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/stock" element={<StockPage />} />
-        <Route path="/sales" element={<SalesPage />} />
-        <Route path="/notifications" element={<NotificationsPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* All Protected Pages wrapped in Layout with Sidebar */}
+        <Route element={isAuthenticated ? <Layout /> : <Navigate to="/login" replace />}>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/notifications" element={<Notifications />} />
+        </Route>
+
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
   );
 }
-
-export default App;

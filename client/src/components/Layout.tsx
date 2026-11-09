@@ -1,99 +1,43 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useState, useEffect } from 'react';
-import api from '../services/api';
-import { NOTIFICATION_API } from '../config/api';
-import './Layout.css';
+import { Sidebar } from './Sidebar';
 
-const Layout = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    const fetchUnreadCount = async () => {
-      try {
-        const response = await api.get(`${NOTIFICATION_API}/notifications/unread-count`);
-        setUnreadCount(response.data.count || 0);
-      } catch {
-        setUnreadCount(0);
-      }
-    };
-    fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
-  };
+export const Layout: React.FC = () => {
+  const { user } = useAuth();
+  const tenantId = user?.tenantId || 'Workspace';
 
   return (
-    <div className="layout">
-      <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div className="sidebar-header">
-          <h2>OrgStack</h2>
-          <button className="sidebar-toggle" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar">
-            ×
-          </button>
-        </div>
-        <nav className="sidebar-nav">
-          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">📊</span> Dashboard
-          </NavLink>
-          <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">📦</span> Products
-          </NavLink>
-          <NavLink to="/stock" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">📋</span> Stock
-          </NavLink>
-          <NavLink to="/sales" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">💰</span> Sales
-          </NavLink>
-          <NavLink to="/notifications" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">🔔</span> Notifications
-            {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
-          </NavLink>
-          <NavLink to="/reports" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-            <span className="nav-icon">📈</span> Reports
-          </NavLink>
-        </nav>
-        <div className="sidebar-footer">
-          <button className="logout-btn" onClick={handleLogout}>
-            <span className="nav-icon">🚪</span> Logout
-          </button>
-        </div>
-      </aside>
+    <div className="flex min-h-screen bg-slate-50 font-sans">
+      {/* Persistent Left Sidebar Navigation */}
+      <Sidebar tenantName={tenantId} />
 
-      <div className="main-wrapper">
-        <header className="topbar">
-          <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)} aria-label="Open menu">
-            ☰
-          </button>
-          <div className="topbar-info">
-            <span className="tenant-name">{user?.tenantId || 'Tenant'}</span>
+      {/* Main View Area */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-white border-b border-slate-200 h-16 px-8 flex items-center justify-between shadow-sm shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-md border border-indigo-100">
+              Active Tenant ID
+            </span>
+            <span className="text-xs font-mono text-slate-500 truncate max-w-sm">
+              {tenantId}
+            </span>
           </div>
-          <div className="topbar-actions">
-            <div className="notification-bell" onClick={() => navigate('/notifications')}>
-              🔔
-              {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+              A
             </div>
-            <div className="user-menu">
-              <span>{user?.email || 'User'}</span>
-            </div>
+            <span className="text-sm font-medium text-slate-700">Tenant Admin</span>
           </div>
         </header>
 
-        <main className="content">
+        {/* Dynamic Page Component (Dashboard, Inventory, Orders, Notifications) */}
+        <main className="flex-1 overflow-y-auto p-8">
           <Outlet />
         </main>
       </div>
-
-      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
     </div>
   );
 };
-
-export default Layout;

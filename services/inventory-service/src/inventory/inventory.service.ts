@@ -78,7 +78,19 @@ export class InventoryService {
   async createProduct(tenantId: string, dto: CreateProductDto): Promise<Product> {
     return this.withScope(tenantId, async (queryRunner) => {
       const product = this.productRepository.create(dto);
-      return queryRunner.manager.save(product);
+      const savedProduct = await queryRunner.manager.save(product);
+
+      if (dto.quantity && dto.quantity > 0) {
+        const movement = this.stockMovementRepository.create({
+          productId: savedProduct.id,
+          quantityChange: dto.quantity,
+          type: 'in' as StockMovementType,
+          reference: 'initial-stock',
+        });
+        await queryRunner.manager.save(movement);
+      }
+
+      return savedProduct;
     });
   }
 
