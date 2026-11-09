@@ -14,9 +14,16 @@ let DatabaseInitService = class DatabaseInitService {
         this.dataSource = dataSource;
     }
     async onModuleInit() {
-        await this.initialize();
+        try {
+            await this.initialize();
+        }
+        catch (e) {
+            console.error('[DatabaseInitService] init skipped:', e?.message ?? e);
+        }
     }
     async initialize() {
+        if (!this.dataSource?.createQueryRunner)
+            return;
         const queryRunner = this.dataSource.createQueryRunner();
         await queryRunner.connect();
         try {

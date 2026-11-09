@@ -1,10 +1,11 @@
-import {
+﻿import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { DataSource, QueryRunner, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 
 import { Product } from './entities/product.entity.js';
 import { StockMovement, StockMovementType } from './entities/stock-movement.entity.js';
@@ -41,8 +42,11 @@ export class InventoryService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(StockMovement)
     private readonly stockMovementRepository: Repository<StockMovement>,
+    @InjectDataSource()
     private readonly dataSource: DataSource,
+    @Inject(TenantConnectionService)
     private readonly tenantConnectionService: TenantConnectionService,
+    @Inject(RabbitmqProducerService)
     private readonly rabbitmqProducerService: RabbitmqProducerService,
   ) {}
 

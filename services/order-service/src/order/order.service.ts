@@ -1,11 +1,13 @@
-import {
+﻿import {
   BadRequestException,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { InjectDataSource } from '@nestjs/typeorm';
 import * as crypto from 'node:crypto';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -20,9 +22,13 @@ import { PaystackService } from './paystack.service.js';
 @Injectable()
 export class OrderService {
   constructor(
+    @InjectDataSource()
     private readonly dataSource: DataSource,
+    @Inject(TenantConnectionService)
     private readonly tenantConnectionService: TenantConnectionService,
+    @Inject(InventoryClientService)
     private readonly inventoryClientService: InventoryClientService,
+    @Inject(PaystackService)
     private readonly paystackService: PaystackService,
   ) {}
 
@@ -165,7 +171,9 @@ export class OrderService {
   }
 
   private async markPaymentPaidByReference(reference: string) {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const ds = this.dataSource;
+    if (!ds?.createQueryRunner) return;
+    const queryRunner = ds.createQueryRunner();
     await queryRunner.connect();
     try {
       const tenants = await queryRunner.query(`SELECT schema_name FROM platform.tenants`);
