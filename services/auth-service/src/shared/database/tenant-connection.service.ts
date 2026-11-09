@@ -98,7 +98,7 @@ export class TenantConnectionService {
       if (!tableName) continue;
       const quotedTable = this.quoteIdentifier(tableName);
       const columns: string[] = [];
-      const enumTypesToCreate: Map<string, string[]> = new Map();
+      const checkConstraints: string[] = [];
 
       for (const column of entity.columns as unknown as ColumnMetadata[]) {
         let colType: string;
@@ -112,11 +112,14 @@ export class TenantConnectionService {
         else if (column.type === Date) colType = 'timestamp';
         else if (column.type === Boolean) colType = 'boolean';
         else if (typeof column.type === 'string' && column.enum && Array.isArray(column.enum) && column.enum.length > 0) {
-          // Handle enum columns - create PostgreSQL enum type
-          const enumName = `${tableName}_${column.propertyName}_enum`.toLowerCase();
+          // Handle enum columns - use varchar with check constraint
+          colType = 'varchar';
           const enumValues = column.enum as string[];
-          enumTypesToCreate.set(enumName, enumValues);
-          colType = enumName;
+          const enumValuesStr = enumValues.map(v => `'${v}'`).join(', ');
+          const constraintName = this.quoteIdentifier(`${tableName}_${column.propertyName}_check`);
+          checkConstraints.push(
+            `CONSTRAINT ${constraintName} CHECK (${this.quoteIdentifier(column.propertyName)} IN (${enumValuesStr}))`
+          );
         }
         else if (typeof column.type === 'string') colType = column.type;
         else colType = 'varchar';
@@ -136,16 +139,6 @@ export class TenantConnectionService {
         columns.push(colDef);
       }
 
-      // Create enum types first
-      for (const [enumName, enumValues] of enumTypesToCreate) {
-        const quotedEnumName = this.quoteIdentifier(enumName);
-        const quoteLiteral = (value: unknown) => `'${String(value).replace(/'/g, "''")}'`;
-        const enumValuesStr = enumValues.map(quoteLiteral).join(', ');
-        await _queryRunner.query(
-          `DO $$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = ${quoteLiteral(enumName)}) THEN CREATE TYPE ${quotedEnumName} AS ENUM (${enumValuesStr}); END IF; END $$;`
-        );
-      }
-
       const fkDefs: string[] = [];
       for (const rel of entity.relations as unknown as RelationMetadata[]) {
         if (rel.isManyToOne || rel.isOneToOne) {
@@ -162,8 +155,8 @@ export class TenantConnectionService {
         }
       }
 
-      const sql =
-        `CREATE TABLE IF NOT EXISTS ${quotedTable} (${[...columns, ...fkDefs].join(', ')})`;
+      const allConstraints = [...columns, ...fkDefs, ...checkConstraints];
+      const sql = `CREATE TABLE IF NOT EXISTS ${quotedTable} (${allConstraints.join(', ')})`;
       await _queryRunner.query(sql);
     }
   }
