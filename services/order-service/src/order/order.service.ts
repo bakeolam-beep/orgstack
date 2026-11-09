@@ -9,7 +9,7 @@ import { DataSource } from 'typeorm';
 import * as crypto from 'node:crypto';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Sale, SaleStatus } from './entities/sale.entity.js';
+import { Sale, SaleStatus, PaymentStatus } from './entities/sale.entity.js';
 import { SaleItem } from './entities/sale-item.entity.js';
 import { CreateSaleDto } from './dto/create-sale.dto.js';
 import { VerifyPaymentDto } from './dto/verify-payment.dto.js';
@@ -84,7 +84,7 @@ export class OrderService {
             } catch {}
           }
           await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.FAILED });
-          throw new BadRequestException(`Stock deduction failed for product ${item.productId}: ${error.message}`);
+          throw new BadRequestException(`Stock deduction failed for product ${item.productId}: ${(error as Error).message}`);
         }
       }
 
@@ -95,7 +95,7 @@ export class OrderService {
         saleReference,
         status: SaleStatus.COMPLETED,
         totalAmount,
-        paymentStatus: 'unpaid',
+        paymentStatus: PaymentStatus.UNPAID,
         items: dto.items,
       };
     });
@@ -110,7 +110,7 @@ export class OrderService {
       if (sale.status !== SaleStatus.COMPLETED) {
         throw new BadRequestException('Sale must be completed before payment');
       }
-      if (sale.paymentStatus === 'paid') {
+      if (sale.paymentStatus === PaymentStatus.PAID) {
         throw new BadRequestException('Sale already paid');
       }
 
@@ -136,10 +136,10 @@ export class OrderService {
 
       const verified = await this.paystackService.verifyPayment(dto.paystackReference);
       if (verified.verified) {
-        await queryRunner.manager.update(Sale, { id: sale.id }, { paymentStatus: 'paid' });
-        return { saleReference: sale.saleReference, paymentStatus: 'paid', verified: true };
+        await queryRunner.manager.update(Sale, { id: sale.id }, { paymentStatus: PaymentStatus.PAID });
+        return { saleReference: sale.saleReference, paymentStatus: PaymentStatus.PAID, verified: true };
       }
-      return { saleReference: sale.saleReference, paymentStatus: 'unpaid', verified: false };
+      return { saleReference: sale.saleReference, paymentStatus: PaymentStatus.UNPAID, verified: false };
     });
   }
 
@@ -174,8 +174,8 @@ export class OrderService {
         try {
           await this.tenantConnectionService.withTenantScope(tenantId, async (qr) => {
             const sale = await qr.manager.findOne(Sale, { where: { paystackReference: reference } });
-            if (sale && sale.paymentStatus !== 'paid') {
-              await qr.manager.update(Sale, { id: sale.id }, { paymentStatus: 'paid' });
+            if (sale && sale.paymentStatus !== PaymentStatus.PAID) {
+              await qr.manager.update(Sale, { id: sale.id }, { paymentStatus: PaymentStatus.PAID });
             }
           });
         } catch {}
@@ -212,12 +212,12 @@ export class OrderService {
     return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
       const sales = await queryRunner.manager.find(Sale);
       const completedSales = sales.filter((s) => s.status === SaleStatus.COMPLETED);
-      const paidSales = sales.filter((s) => s.paymentStatus === 'paid');
+      const paidSales = sales.filter((s) => s.paymentStatus === PaymentStatus.PAID);
       const totalRevenue = paidSales.reduce((sum, s) => sum + Number(s.totalAmount ?? 0), 0);
       return {
         totalSales: completedSales.length,
         totalRevenue,
-        pendingPayments: completedSales.filter((s) => s.paymentStatus !== 'paid').length,
+        pendingPayments: completedSales.filter((s) => s.paymentStatus !== PaymentStatus.PAID).length,
       };
     });
   }

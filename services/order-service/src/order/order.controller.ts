@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -24,6 +25,7 @@ interface AuthenticatedRequest extends Request {
     role: string;
     email?: string;
   };
+  rawBody?: Buffer | string;
 }
 
 @Controller('orders')
@@ -48,7 +50,10 @@ export class OrderController {
     @Body('email') userEmail?: string,
   ) {
     const tenantId = req.user.tenantId;
-    const email = userEmail ?? req.user.email;
+    const email = userEmail ?? req.user.email ?? '';
+    if (!email) {
+      throw new BadRequestException('Email is required to initialize payment');
+    }
     return this.orderService.initializePayment(tenantId, saleReference, email);
   }
 
@@ -62,7 +67,8 @@ export class OrderController {
 
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
-  async handleWebhook(@Req() req: Request, @Header('x-paystack-signature') signature: string) {
+  async handleWebhook(@Req() req: AuthenticatedRequest) {
+    const signature = req.headers['x-paystack-signature'] as string;
     const raw = req.rawBody;
     const parsed = typeof raw === 'string' ? JSON.parse(raw) : JSON.parse(Buffer.from(raw as Buffer).toString());
     return this.orderService.handlePaystackWebhook(parsed, signature ?? '');
