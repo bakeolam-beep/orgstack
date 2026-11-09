@@ -16,6 +16,9 @@ export class SaleItem {
   @Column({ type: 'uuid', nullable: false, name: 'productId' })
   productId: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'productName' })
+  productName: string | null;
+
   @Column({ type: 'int', nullable: false })
   quantity: number;
 

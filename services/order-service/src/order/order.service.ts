@@ -21,6 +21,8 @@ import { PaystackService } from './paystack.service.js';
 
 @Injectable()
 export class OrderService {
+  private readonly ensuredTenants = new Set<string>();
+
   constructor(
     @InjectDataSource()
     private readonly dataSource: DataSource,
@@ -31,6 +33,18 @@ export class OrderService {
     @Inject(PaystackService)
     private readonly paystackService: PaystackService,
   ) {}
+
+  private async ensureTenantSchema(tenantId: string): Promise<void> {
+    if (this.ensuredTenants.has(tenantId)) return;
+    const entities = [this.dataSource.getMetadata(Sale), this.dataSource.getMetadata(SaleItem)];
+    await this.tenantConnectionService.ensureTenantTables(tenantId, entities);
+    this.ensuredTenants.add(tenantId);
+  }
+
+  private async withScope<T>(tenantId: string, operation: (queryRunner: import("typeorm").QueryRunner) => Promise<T>): Promise<T> {
+    await this.ensureTenantSchema(tenantId);
+    return this.tenantConnectionService.withTenantScope(tenantId, operation);
+  }
 
   async createSale(tenantId: string, dto: CreateSaleDto, bearerToken: string) {
     if (!dto.items || dto.items.length === 0) {
@@ -43,7 +57,7 @@ export class OrderService {
       totalAmount += item.quantity * item.unitPrice;
     }
 
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sale = queryRunner.manager.create(Sale, {
         id: uuidv4(),
         saleReference,
@@ -108,7 +122,7 @@ export class OrderService {
   }
 
   async initializePayment(tenantId: string, saleReference: string, userEmail: string) {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sale = await queryRunner.manager.findOne(Sale, { where: { saleReference } });
       if (!sale) {
         throw new NotFoundException('Sale not found');
@@ -134,7 +148,7 @@ export class OrderService {
   }
 
   async verifyPayment(tenantId: string, dto: VerifyPaymentDto) {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sale = await queryRunner.manager.findOne(Sale, { where: { paystackReference: dto.paystackReference } });
       if (!sale) {
         throw new NotFoundException('Sale not found');
@@ -180,7 +194,7 @@ export class OrderService {
       for (const { schema_name } of tenants) {
         const tenantId = String(schema_name).replace(/^tenant_/, '');
         try {
-          await this.tenantConnectionService.withTenantScope(tenantId, async (qr) => {
+          await this.withScope(tenantId, async (qr: import("typeorm").QueryRunner) => {
             const sale = await qr.manager.findOne(Sale, { where: { paystackReference: reference } });
             if (sale && sale.paymentStatus !== PaymentStatus.PAID) {
               await qr.manager.update(Sale, { id: sale.id }, { paymentStatus: PaymentStatus.PAID });
@@ -194,7 +208,7 @@ export class OrderService {
   }
 
   async getSales(tenantId: string) {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sales = await queryRunner.manager.find(Sale, { order: { createdAt: 'DESC' } });
       const result: Array<Record<string, unknown>> = [];
       for (const sale of sales) {
@@ -206,7 +220,7 @@ export class OrderService {
   }
 
   async getSaleById(tenantId: string, saleId: string) {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sale = await queryRunner.manager.findOne(Sale, { where: { id: saleId } });
       if (!sale) {
         throw new NotFoundException('Sale not found');
@@ -217,15 +231,15 @@ export class OrderService {
   }
 
   async getSalesSummary(tenantId: string) {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sales = await queryRunner.manager.find(Sale);
-      const completedSales = sales.filter((s) => s.status === SaleStatus.COMPLETED);
-      const paidSales = sales.filter((s) => s.paymentStatus === PaymentStatus.PAID);
-      const totalRevenue = paidSales.reduce((sum, s) => sum + Number(s.totalAmount ?? 0), 0);
+      const completedSales = sales.filter((s: Sale) => s.status === SaleStatus.COMPLETED);
+      const paidSales = sales.filter((s: Sale) => s.paymentStatus === PaymentStatus.PAID);
+      const totalRevenue = paidSales.reduce((sum: number, s: Sale) => sum + Number(s.totalAmount ?? 0), 0);
       return {
         totalSales: completedSales.length,
         totalRevenue,
-        pendingPayments: completedSales.filter((s) => s.paymentStatus !== PaymentStatus.PAID).length,
+        pendingPayments: completedSales.filter((s: Sale) => s.paymentStatus !== PaymentStatus.PAID).length,
       };
     });
   }

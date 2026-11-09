@@ -13,8 +13,14 @@ export class Notification {
   @Column({ type: 'varchar', length: 100, nullable: false })
   type: string;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  title: string | null;
+
   @Column({ type: 'text', nullable: false })
   message: string;
+
+  @Column({ type: 'jsonb', nullable: true })
+  metadata: Record<string, unknown> | null;
 
   @Column({ type: 'boolean', default: false, nullable: false, name: 'isRead' })
   isRead: boolean;

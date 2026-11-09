@@ -37,6 +37,8 @@ export interface StockMovementResult {
 
 @Injectable()
 export class InventoryService {
+  private readonly ensuredTenants = new Set<string>();
+
   constructor(
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
@@ -50,6 +52,21 @@ export class InventoryService {
     private readonly rabbitmqProducerService: RabbitmqProducerService,
   ) {}
 
+  private async ensureTenantSchema(tenantId: string): Promise<void> {
+    if (this.ensuredTenants.has(tenantId)) return;
+    const entities = [
+      this.dataSource.getMetadata(Product),
+      this.dataSource.getMetadata(StockMovement),
+    ];
+    await this.tenantConnectionService.ensureTenantTables(tenantId, entities);
+    this.ensuredTenants.add(tenantId);
+  }
+
+  private async withScope<T>(tenantId: string, operation: (queryRunner: QueryRunner) => Promise<T>): Promise<T> {
+    await this.ensureTenantSchema(tenantId);
+    return this.tenantConnectionService.withTenantScope(tenantId, operation);
+  }
+
   private async getCurrentStock(queryRunner: QueryRunner, productId: string): Promise<number> {
     const result = await queryRunner.query(
       `SELECT COALESCE(SUM("quantityChange"), 0) as total FROM "stock_movements" WHERE "productId" = $1`,
@@ -59,14 +76,14 @@ export class InventoryService {
   }
 
   async createProduct(tenantId: string, dto: CreateProductDto): Promise<Product> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const product = this.productRepository.create(dto);
       return queryRunner.manager.save(product);
     });
   }
 
   async findAllProducts(tenantId: string): Promise<ProductWithStock[]> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const products = await queryRunner.manager.find(Product, {
         order: { name: 'ASC' },
       });
@@ -82,7 +99,7 @@ export class InventoryService {
   }
 
   async findOneProduct(tenantId: string, productId: string): Promise<ProductWithStock> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const product = await queryRunner.manager.findOne(Product, {
         where: { id: productId },
       });
@@ -97,7 +114,7 @@ export class InventoryService {
   }
 
   async updateProduct(tenantId: string, productId: string, dto: UpdateProductDto): Promise<Product> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const product = await queryRunner.manager.findOne(Product, {
         where: { id: productId },
       });
@@ -112,7 +129,7 @@ export class InventoryService {
   }
 
   async deleteProduct(tenantId: string, productId: string): Promise<{ deleted: true }> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const product = await queryRunner.manager.findOne(Product, {
         where: { id: productId },
       });
@@ -136,7 +153,7 @@ export class InventoryService {
   }
 
   async recordStockMovement(tenantId: string, dto: StockMovementDto): Promise<StockMovementResult> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const product = await queryRunner.manager.findOne(Product, {
         where: { id: dto.productId },
       });
@@ -197,7 +214,7 @@ export class InventoryService {
   }
 
   async getStockSummary(tenantId: string): Promise<StockSummaryItem[]> {
-    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner) => {
+    return this.withScope(tenantId, async (queryRunner) => {
       const products = await queryRunner.manager.find(Product, {
         order: { name: 'ASC' },
       });

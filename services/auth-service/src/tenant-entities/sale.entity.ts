@@ -35,6 +35,9 @@ export class Sale {
   @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.UNPAID, nullable: false, name: 'paymentStatus' })
   paymentStatus: PaymentStatus;
 
+  @Column({ type: 'varchar', length: 255, nullable: true, name: 'paystackReference' })
+  paystackReference: string | null;
+
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'createdAt' })
   createdAt: Date;
 
