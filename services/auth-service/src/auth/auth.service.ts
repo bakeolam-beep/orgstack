@@ -72,7 +72,6 @@ export class AuthService {
     }
 
     const tenantId = uuidv4();
-    const schemaName = `tenant_${tenantId}`;
 
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -82,7 +81,7 @@ export class AuthService {
       const tenant = this.tenantRepository.create({
         id: tenantId,
         name: dto.businessName,
-        schemaName,
+        schemaName: `tenant_${tenantId}`,
         status: TenantStatus.ACTIVE,
       });
 
@@ -96,7 +95,7 @@ export class AuthService {
         this.dataSource.getMetadata(Notification),
       ];
 
-      await this.tenantConnectionService.createTenantSchema(schemaName, entities);
+      await this.tenantConnectionService.createTenantSchema(tenantId, entities);
 
       const passwordHash = await bcrypt.hash(dto.adminPassword, this.bcryptSaltRounds);
 
@@ -119,6 +118,7 @@ export class AuthService {
       };
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      console.error('Registration error:', error);
       throw new InternalServerErrorException('Registration failed');
     } finally {
       await queryRunner.release();

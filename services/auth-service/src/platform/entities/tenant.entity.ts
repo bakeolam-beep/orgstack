@@ -19,15 +19,15 @@ export class Tenant {
   @Column({ type: 'varchar', length: 255, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 100, unique: true, nullable: false, name: 'schemaName' })
+  @Column({ type: 'varchar', length: 100, unique: true, nullable: false, name: 'schema_name' })
   schemaName: string;
 
   @Column({ type: 'enum', enum: TenantStatus, default: TenantStatus.ACTIVE, nullable: false })
   status: TenantStatus;
 
-  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'createdAt' })
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', name: 'updatedAt' })
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP', name: 'updated_at' })
   updatedAt: Date;
 }
