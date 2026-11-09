@@ -1,13 +1,463 @@
 {
-  "fatalError": "Error: Login failed; cannot continue. Alpha=500 Beta=500\n    at main (file:///C:/Projects/orgstack/scripts/evaluate-platform.ts:210:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "meta": {
+    "startedAt": "2026-11-09T12:19:23.510Z",
+    "nodeVersion": "v24.21.0",
+    "services": {
+      "AUTH": "http://localhost:3001",
+      "INVENTORY": "http://localhost:3002",
+      "ORDERS": "http://localhost:3003",
+      "NOTIFICATIONS": "http://localhost:3004"
+    },
+    "tenants": {
+      "alpha": {
+        "email": "alpha_1794226763523@eval.com",
+        "name": "Tenant Alpha Eval",
+        "password": "EvalPass123!",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3NWZkMDE0NS1jZDAwLTQ4ZWEtODFiZS0yNzhmNzk5YWQ1MGQiLCJ0ZW5hbnRJZCI6ImQ5YTVmM2ExLTFmM2ItNDEwZi05YmVkLWNiZThlNjg4MDFhZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNjc2NSwiZXhwIjoxNzk0MjMwMzY1fQ.hdcTtaCt_-07XVv5GLwOHl9HbpK3lDvf3sVGXn02Cs0",
+        "tenantId": "d9a5f3a1-1f3b-410f-9bed-cbe8e68801ae",
+        "raw": {
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI3NWZkMDE0NS1jZDAwLTQ4ZWEtODFiZS0yNzhmNzk5YWQ1MGQiLCJ0ZW5hbnRJZCI6ImQ5YTVmM2ExLTFmM2ItNDEwZi05YmVkLWNiZThlNjg4MDFhZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNjc2NSwiZXhwIjoxNzk0MjMwMzY1fQ.hdcTtaCt_-07XVv5GLwOHl9HbpK3lDvf3sVGXn02Cs0",
+          "tenantId": "d9a5f3a1-1f3b-410f-9bed-cbe8e68801ae",
+          "role": "admin"
+        },
+        "status": 200,
+        "registerStatus": 201
+      },
+      "beta": {
+        "email": "beta_1794226763523@eval.com",
+        "name": "Tenant Beta Eval",
+        "password": "EvalPass123!",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJiMmY3Ni1mNzMyLTQ5NTItOTg4ZC0xZjk1NmU1MTc4NzAiLCJ0ZW5hbnRJZCI6IjNlYmZlZGU1LTQ0ZTEtNGUwYy1hMzIzLWRiODQ4ZjVlNTg1ZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNjc2NSwiZXhwIjoxNzk0MjMwMzY1fQ.sLT811o-fY4uZ9Gz1Qfka_Yx5dYqoZlt5H89D-l2QWU",
+        "tenantId": "3ebfede5-44e1-4e0c-a323-db848f5e585e",
+        "raw": {
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWJiMmY3Ni1mNzMyLTQ5NTItOTg4ZC0xZjk1NmU1MTc4NzAiLCJ0ZW5hbnRJZCI6IjNlYmZlZGU1LTQ0ZTEtNGUwYy1hMzIzLWRiODQ4ZjVlNTg1ZSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNjc2NSwiZXhwIjoxNzk0MjMwMzY1fQ.sLT811o-fY4uZ9Gz1Qfka_Yx5dYqoZlt5H89D-l2QWU",
+          "tenantId": "3ebfede5-44e1-4e0c-a323-db848f5e585e",
+          "role": "admin"
+        },
+        "status": 200,
+        "registerStatus": 201
+      }
+    },
+    "alphaProducts": [
+      {
+        "request": {
+          "name": "Alpha Product 1",
+          "sku": "ALPHA-1794226763523-1",
+          "description": "Eval product 1",
+          "unitPrice": 100,
+          "reorderLevel": 50
+        },
+        "response": {
+          "statusCode": 500,
+          "message": "Internal server error",
+          "timestamp": "2026-11-09T12:19:25.559Z",
+          "path": "/inventory/products"
+        },
+        "status": 500
+      },
+      {
+        "request": {
+          "name": "Alpha Product 2",
+          "sku": "ALPHA-1794226763523-2",
+          "description": "Eval product 2",
+          "unitPrice": 200,
+          "reorderLevel": 5
+        },
+        "response": {
+          "statusCode": 500,
+          "message": "Internal server error",
+          "timestamp": "2026-11-09T12:19:25.574Z",
+          "path": "/inventory/products"
+        },
+        "status": 500
+      },
+      {
+        "request": {
+          "name": "Alpha Product 3",
+          "sku": "ALPHA-1794226763523-3",
+          "description": "Eval product 3",
+          "unitPrice": 300,
+          "reorderLevel": 5
+        },
+        "response": {
+          "statusCode": 500,
+          "message": "Internal server error",
+          "timestamp": "2026-11-09T12:19:25.581Z",
+          "path": "/inventory/products"
+        },
+        "status": 500
+      }
+    ],
+    "betaProducts": [
+      {
+        "request": {
+          "name": "Beta Product 1",
+          "sku": "BETA-1794226763523-1",
+          "description": "Beta eval",
+          "unitPrice": 55,
+          "reorderLevel": 2
+        },
+        "response": {
+          "statusCode": 500,
+          "message": "Internal server error",
+          "timestamp": "2026-11-09T12:19:27.094Z",
+          "path": "/inventory/products"
+        },
+        "status": 500
+      }
+    ],
+    "alphaSales": [],
+    "finishedAt": "2026-11-09T12:19:44.249Z",
+    "logLineCount": 39
+  },
+  "isolation": {
+    "testCases": [
+      {
+        "id": "ISO-SETUP",
+        "description": "Setup produced Alpha product ID",
+        "authenticatedContext": "Tenant Alpha",
+        "targetContext": "N/A",
+        "attemptedOperation": "Create product",
+        "expectedResult": "Product created with ID",
+        "actualResult": "No product ID returned",
+        "status": "FAIL"
+      }
+    ]
+  },
+  "performance": {
+    "rows": [
+      {
+        "endpoint": "POST  /auth/login",
+        "concurrency": 1,
+        "totalRequests": 12,
+        "avgMs": 111.19,
+        "medianMs": 100.51,
+        "p90Ms": 151.47,
+        "p95Ms": 175.73,
+        "p99Ms": 175.73,
+        "minMs": 94.21,
+        "maxMs": 175.73,
+        "throughputRps": 8.97,
+        "errorRatePct": 0
+      },
+      {
+        "endpoint": "GET /inventory/products",
+        "concurrency": 1,
+        "totalRequests": 12,
+        "avgMs": 7.29,
+        "medianMs": 7.23,
+        "p90Ms": 11.05,
+        "p95Ms": 11.54,
+        "p99Ms": 11.54,
+        "minMs": 3.61,
+        "maxMs": 11.54,
+        "throughputRps": 129.86,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /inventory/stock-movements",
+        "concurrency": 1,
+        "totalRequests": 6,
+        "avgMs": 9.43,
+        "medianMs": 9.59,
+        "p90Ms": 13.64,
+        "p95Ms": 13.64,
+        "p99Ms": 13.64,
+        "minMs": 5.98,
+        "maxMs": 13.64,
+        "throughputRps": 97.25,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /orders",
+        "concurrency": 1,
+        "totalRequests": 6,
+        "avgMs": 109.32,
+        "medianMs": 11.56,
+        "p90Ms": 533.1,
+        "p95Ms": 533.1,
+        "p99Ms": 533.1,
+        "minMs": 8.77,
+        "maxMs": 533.1,
+        "throughputRps": 9.11,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "GET /notifications",
+        "concurrency": 1,
+        "totalRequests": 12,
+        "avgMs": 16.34,
+        "medianMs": 10.88,
+        "p90Ms": 18.63,
+        "p95Ms": 63.07,
+        "p99Ms": 63.07,
+        "minMs": 7.81,
+        "maxMs": 63.07,
+        "throughputRps": 58.38,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST  /auth/login",
+        "concurrency": 10,
+        "totalRequests": 40,
+        "avgMs": 866.68,
+        "medianMs": 199.68,
+        "p90Ms": 3326.62,
+        "p95Ms": 4360.78,
+        "p99Ms": 4504.33,
+        "minMs": 123.25,
+        "maxMs": 4504.33,
+        "throughputRps": 7.96,
+        "errorRatePct": 0
+      },
+      {
+        "endpoint": "GET /inventory/products",
+        "concurrency": 10,
+        "totalRequests": 40,
+        "avgMs": 46.05,
+        "medianMs": 30.31,
+        "p90Ms": 82.28,
+        "p95Ms": 109.25,
+        "p99Ms": 110.8,
+        "minMs": 16.52,
+        "maxMs": 110.8,
+        "throughputRps": 192.18,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /inventory/stock-movements",
+        "concurrency": 10,
+        "totalRequests": 20,
+        "avgMs": 21.72,
+        "medianMs": 23.87,
+        "p90Ms": 26.12,
+        "p95Ms": 26.55,
+        "p99Ms": 30.74,
+        "minMs": 10.63,
+        "maxMs": 30.74,
+        "throughputRps": 322.6,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /orders",
+        "concurrency": 10,
+        "totalRequests": 20,
+        "avgMs": 33.29,
+        "medianMs": 26.19,
+        "p90Ms": 51.57,
+        "p95Ms": 53.12,
+        "p99Ms": 57.96,
+        "minMs": 11.44,
+        "maxMs": 57.96,
+        "throughputRps": 248.68,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "GET /notifications",
+        "concurrency": 10,
+        "totalRequests": 40,
+        "avgMs": 21.64,
+        "medianMs": 21.11,
+        "p90Ms": 25.64,
+        "p95Ms": 30.48,
+        "p99Ms": 32.07,
+        "minMs": 17.41,
+        "maxMs": 32.07,
+        "throughputRps": 402.09,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST  /auth/login",
+        "concurrency": 25,
+        "totalRequests": 50,
+        "avgMs": 662.92,
+        "medianMs": 743.55,
+        "p90Ms": 836,
+        "p95Ms": 860.73,
+        "p99Ms": 955.4,
+        "minMs": 218.39,
+        "maxMs": 955.4,
+        "throughputRps": 29.54,
+        "errorRatePct": 0
+      },
+      {
+        "endpoint": "GET /inventory/products",
+        "concurrency": 25,
+        "totalRequests": 50,
+        "avgMs": 51.04,
+        "medianMs": 44.19,
+        "p90Ms": 94.47,
+        "p95Ms": 102.53,
+        "p99Ms": 105.31,
+        "minMs": 22.29,
+        "maxMs": 105.31,
+        "throughputRps": 353.59,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /inventory/stock-movements",
+        "concurrency": 25,
+        "totalRequests": 25,
+        "avgMs": 35.06,
+        "medianMs": 32.25,
+        "p90Ms": 49.93,
+        "p95Ms": 52.66,
+        "p99Ms": 54.27,
+        "minMs": 20.1,
+        "maxMs": 54.27,
+        "throughputRps": 393.29,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "POST /orders",
+        "concurrency": 25,
+        "totalRequests": 25,
+        "avgMs": 39.64,
+        "medianMs": 36.43,
+        "p90Ms": 59.42,
+        "p95Ms": 60.54,
+        "p99Ms": 61.81,
+        "minMs": 20.18,
+        "maxMs": 61.81,
+        "throughputRps": 367.13,
+        "errorRatePct": 100
+      },
+      {
+        "endpoint": "GET /notifications",
+        "concurrency": 25,
+        "totalRequests": 50,
+        "avgMs": 38.43,
+        "medianMs": 35.92,
+        "p90Ms": 60.51,
+        "p95Ms": 60.68,
+        "p99Ms": 61.6,
+        "minMs": 19.09,
+        "maxMs": 61.6,
+        "throughputRps": 497.94,
+        "errorRatePct": 100
+      }
+    ]
+  },
+  "scalability": {
+    "rows": [
+      {
+        "tenantCount": 2,
+        "totalActiveVUsers": 0,
+        "totalRequests": 0,
+        "avgMs": 0,
+        "p95Ms": 0,
+        "throughputRps": 0,
+        "errorRatePct": 0,
+        "notes": "Provisioned 0/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+      },
+      {
+        "tenantCount": 5,
+        "totalActiveVUsers": 0,
+        "totalRequests": 0,
+        "avgMs": 0,
+        "p95Ms": 0,
+        "throughputRps": 0,
+        "errorRatePct": 0,
+        "notes": "Provisioned 0/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+      },
+      {
+        "tenantCount": 15,
+        "totalActiveVUsers": 0,
+        "totalRequests": 0,
+        "avgMs": 0,
+        "p95Ms": 0,
+        "throughputRps": 0,
+        "errorRatePct": 0,
+        "notes": "Provisioned 0/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+      }
+    ]
+  },
+  "summary": {
+    "isolation": {
+      "total": 1,
+      "passed": 0,
+      "failed": 1
+    },
+    "performance": {
+      "rows": 15,
+      "p95TargetMs": 1000,
+      "rowsMeetingP95": 14
+    },
+    "scalability": {
+      "rows": [
+        {
+          "tenantCount": 2,
+          "totalActiveVUsers": 0,
+          "totalRequests": 0,
+          "avgMs": 0,
+          "p95Ms": 0,
+          "throughputRps": 0,
+          "errorRatePct": 0,
+          "notes": "Provisioned 0/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        },
+        {
+          "tenantCount": 5,
+          "totalActiveVUsers": 0,
+          "totalRequests": 0,
+          "avgMs": 0,
+          "p95Ms": 0,
+          "throughputRps": 0,
+          "errorRatePct": 0,
+          "notes": "Provisioned 0/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        },
+        {
+          "tenantCount": 15,
+          "totalActiveVUsers": 0,
+          "totalRequests": 0,
+          "avgMs": 0,
+          "p95Ms": 0,
+          "throughputRps": 0,
+          "errorRatePct": 0,
+          "notes": "Provisioned 0/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        }
+      ]
+    },
+    "finishedAt": "2026-11-09T12:19:44.249Z"
+  },
   "logs": [
-    "[2026-11-09T12:07:54.917Z] Evaluation start. Node v24.21.0",
-    "[2026-11-09T12:07:54.918Z] Targets: auth=http://localhost:3001 inventory=http://localhost:3002 orders=http://localhost:3003 notifications=http://localhost:3004",
-    "[2026-11-09T12:07:54.918Z] Registering Tenant Alpha: alpha_1794226074918@eval.com",
-    "[2026-11-09T12:07:56.161Z] Alpha register status=500 body={\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:07:56.134Z\",\"path\":\"/auth/register\"}",
-    "[2026-11-09T12:07:56.162Z] Registering Tenant Beta: beta_1794226074918@eval.com",
-    "[2026-11-09T12:07:56.192Z] Beta register status=500 body={\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:07:56.188Z\",\"path\":\"/auth/register\"}",
-    "[2026-11-09T12:07:56.229Z] Alpha login status=500 tenant= token=no",
-    "[2026-11-09T12:07:56.230Z] Beta login status=500 tenant= token=no"
+    "[2026-11-09T12:19:23.513Z] Evaluation start. Node v24.21.0",
+    "[2026-11-09T12:19:23.522Z] Targets: auth=http://localhost:3001 inventory=http://localhost:3002 orders=http://localhost:3003 notifications=http://localhost:3004",
+    "[2026-11-09T12:19:23.523Z] Registering Tenant Alpha: alpha_1794226763523@eval.com",
+    "[2026-11-09T12:19:24.804Z] Alpha register status=201 body={\"tenantId\":\"d9a5f3a1-1f3b-410f-9bed-cbe8e68801ae\",\"userId\":\"75fd0145-cd00-48ea-81be-278f799ad50d\",\"email\":\"alpha_1794226763523@eval.com\"}",
+    "[2026-11-09T12:19:24.804Z] Registering Tenant Beta: beta_1794226763523@eval.com",
+    "[2026-11-09T12:19:25.138Z] Beta register status=201 body={\"tenantId\":\"3ebfede5-44e1-4e0c-a323-db848f5e585e\",\"userId\":\"49bb2f76-f732-4952-988d-1f956e517870\",\"email\":\"beta_1794226763523@eval.com\"}",
+    "[2026-11-09T12:19:25.424Z] Alpha login status=200 tenant=d9a5f3a1-1f3b-410f-9bed-cbe8e68801ae token=yes",
+    "[2026-11-09T12:19:25.425Z] Beta login status=200 tenant=3ebfede5-44e1-4e0c-a323-db848f5e585e token=yes",
+    "[2026-11-09T12:19:25.564Z] Create alpha product 1: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:19:25.559Z\",\"path\":\"/inventory/products\"}",
+    "[2026-11-09T12:19:25.575Z] Create alpha product 2: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:19:25.574Z\",\"path\":\"/inventory/products\"}",
+    "[2026-11-09T12:19:25.581Z] Create alpha product 3: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:19:25.581Z\",\"path\":\"/inventory/products\"}",
+    "[2026-11-09T12:19:27.095Z] Create beta product: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:19:27.094Z\",\"path\":\"/inventory/products\"}",
+    "[2026-11-09T12:19:27.096Z] ISOLATION ISO-SETUP: FAIL - No product ID returned",
+    "[2026-11-09T12:19:27.614Z] Perf tenant login status=200",
+    "[2026-11-09T12:19:27.620Z] Perf product id=undefined status=500",
+    "[2026-11-09T12:19:27.621Z] Performance level concurrency=1 iters/user=12",
+    "[2026-11-09T12:19:29.980Z] Performance level concurrency=10 iters/user=4",
+    "[2026-11-09T12:19:35.456Z] Performance level concurrency=25 iters/user=2",
+    "[2026-11-09T12:19:37.523Z] PERF POST  /auth/login c=1 avg=111.19 p95=175.73 err=0% n=12",
+    "[2026-11-09T12:19:37.523Z] PERF GET /inventory/products c=1 avg=7.29 p95=11.54 err=100% n=12",
+    "[2026-11-09T12:19:37.523Z] PERF POST /inventory/stock-movements c=1 avg=9.43 p95=13.64 err=100% n=6",
+    "[2026-11-09T12:19:37.523Z] PERF POST /orders c=1 avg=109.32 p95=533.1 err=100% n=6",
+    "[2026-11-09T12:19:37.523Z] PERF GET /notifications c=1 avg=16.34 p95=63.07 err=100% n=12",
+    "[2026-11-09T12:19:37.523Z] PERF POST  /auth/login c=10 avg=866.68 p95=4360.78 err=0% n=40",
+    "[2026-11-09T12:19:37.523Z] PERF GET /inventory/products c=10 avg=46.05 p95=109.25 err=100% n=40",
+    "[2026-11-09T12:19:37.523Z] PERF POST /inventory/stock-movements c=10 avg=21.72 p95=26.55 err=100% n=20",
+    "[2026-11-09T12:19:37.523Z] PERF POST /orders c=10 avg=33.29 p95=53.12 err=100% n=20",
+    "[2026-11-09T12:19:37.523Z] PERF GET /notifications c=10 avg=21.64 p95=30.48 err=100% n=40",
+    "[2026-11-09T12:19:37.523Z] PERF POST  /auth/login c=25 avg=662.92 p95=860.73 err=0% n=50",
+    "[2026-11-09T12:19:37.523Z] PERF GET /inventory/products c=25 avg=51.04 p95=102.53 err=100% n=50",
+    "[2026-11-09T12:19:37.523Z] PERF POST /inventory/stock-movements c=25 avg=35.06 p95=52.66 err=100% n=25",
+    "[2026-11-09T12:19:37.523Z] PERF POST /orders c=25 avg=39.64 p95=60.54 err=100% n=25",
+    "[2026-11-09T12:19:37.523Z] PERF GET /notifications c=25 avg=38.43 p95=60.68 err=100% n=50",
+    "[2026-11-09T12:19:37.523Z] Scalability provisioning 2 tenants",
+    "[2026-11-09T12:19:38.343Z] SCALE tenants=2 vusers=0 avg=0 p95=0 err=0% thr=0",
+    "[2026-11-09T12:19:38.343Z] Scalability provisioning 5 tenants",
+    "[2026-11-09T12:19:39.695Z] SCALE tenants=5 vusers=0 avg=0 p95=0 err=0% thr=0",
+    "[2026-11-09T12:19:39.695Z] Scalability provisioning 15 tenants",
+    "[2026-11-09T12:19:44.248Z] SCALE tenants=15 vusers=0 avg=0 p95=0 err=0% thr=0"
   ]
 }
