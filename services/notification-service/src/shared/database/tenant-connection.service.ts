@@ -209,7 +209,7 @@ export class TenantConnectionService {
           const def = this.defaultForColumn(column);
           if (def) alterSql += ` ${def}`;
           else if (colType === 'boolean') alterSql += ' DEFAULT false';
-          else if (colType.includes('int') || colType === 'numeric' || colType.startsWith('decimal')) alterSql += ' DEFAULT 0';
+          else if (colType.includes('int') || colType.startsWith('numeric') || colType.startsWith('decimal')) alterSql += ' DEFAULT 0';
           else if (colType.includes('timestamp')) alterSql += ' DEFAULT CURRENT_TIMESTAMP';
           else alterSql += " DEFAULT ''";
         } else if (column.default !== undefined && column.default !== null) {

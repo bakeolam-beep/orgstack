@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { ORDER_API, INVENTORY_API } from '../config/api';
 
 interface Order {
@@ -15,7 +16,7 @@ interface Product {
   id: string;
   name: string;
   sku: string;
-  unitPrice: number;
+  price: number;
 }
 
 interface LineItem {
@@ -25,6 +26,7 @@ interface LineItem {
 }
 
 export const Orders = () => {
+  const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState('');
@@ -89,7 +91,7 @@ export const Orders = () => {
     if (field === 'productId') {
       const product = products.find((p) => p.id === value);
       if (product) {
-        newItems[index].unitPrice = product.unitPrice;
+        newItems[index].unitPrice = product.price;
       }
     }
     setLineItems(newItems);
@@ -114,8 +116,8 @@ export const Orders = () => {
     const payload = {
       items: validItems.map((item) => ({
         productId: item.productId,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
+        quantity: Number(item.quantity),
+        unitPrice: Number(item.unitPrice),
       })),
     };
 
@@ -126,7 +128,15 @@ export const Orders = () => {
       setPayUrl(null);
       fetchData();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to create sale';
+      const message =
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.data &&
+        (err as any).response.data.message
+          ? (err as any).response.data.message
+          : err instanceof Error
+            ? err.message
+            : 'Failed to create sale';
       setFormError(message);
     } finally {
       setSubmitting(false);
@@ -137,13 +147,22 @@ export const Orders = () => {
     if (!lastSaleRef) return;
     setPaymentLoading(true);
     try {
-      const response = await api.post(`${ORDER_API}/orders/${lastSaleRef}/pay`);
+      const email = user?.email || '';
+      const response = await api.post(`${ORDER_API}/orders/${lastSaleRef}/pay`, { email });
       if (response.data.authorizationUrl) {
         setPayUrl(response.data.authorizationUrl);
         window.location.href = response.data.authorizationUrl;
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Payment initiation failed';
+      const message =
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.data &&
+        (err as any).response.data.message
+          ? (err as any).response.data.message
+          : err instanceof Error
+            ? err.message
+            : 'Payment initiation failed';
       alert(message);
     } finally {
       setPaymentLoading(false);
@@ -274,7 +293,7 @@ export const Orders = () => {
                           <option value="">Select product</option>
                           {products.map((p) => (
                             <option key={p.id} value={p.id}>
-                              {p.name} ({p.sku}) - {formatCurrency(p.unitPrice)}
+                              {p.name} ({p.sku}) -                               {formatCurrency(p.price)}
                             </option>
                           ))}
                         </select>

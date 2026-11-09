@@ -8,7 +8,7 @@ interface StockItem {
   sku: string;
   currentStock: number;
   reorderLevel: number;
-  unitPrice: number;
+  price: number;
   isLowStock: boolean;
 }
 
@@ -55,7 +55,7 @@ const ReportsPage = () => {
   }, []);
 
   const totalInventoryValue = stockItems.reduce(
-    (sum, item) => sum + item.currentStock * item.unitPrice,
+    (sum, item) => sum + item.currentStock * item.price,
     0
   );
 
@@ -135,8 +135,8 @@ const ReportsPage = () => {
                           <td>{item.sku}</td>
                           <td>{item.currentStock}</td>
                           <td>{item.reorderLevel}</td>
-                          <td>{formatCurrency(item.unitPrice)}</td>
-                          <td>{formatCurrency(item.currentStock * item.unitPrice)}</td>
+                          <td>{formatCurrency(item.price)}</td>
+                          <td>{formatCurrency(item.currentStock * item.price)}</td>
                           <td>
                             <span className={`badge ${item.isLowStock ? 'badge-warning' : 'badge-success'}`}>
                               {item.isLowStock ? 'Low Stock' : 'In Stock'}

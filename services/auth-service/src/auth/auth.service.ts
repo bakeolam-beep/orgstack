@@ -161,6 +161,7 @@ export class AuthService {
       userId: user.id,
       tenantId: user.tenantId,
       role: user.role,
+      email: user.email,
     };
 
     const cfg = this.configService as ConfigService | undefined;
