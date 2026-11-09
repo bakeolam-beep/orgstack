@@ -1,6 +1,6 @@
 {
   "meta": {
-    "startedAt": "2026-11-09T12:31:20.837Z",
+    "startedAt": "2026-11-09T13:45:18.498Z",
     "nodeVersion": "v24.21.0",
     "services": {
       "AUTH": "http://localhost:3001",
@@ -10,28 +10,28 @@
     },
     "tenants": {
       "alpha": {
-        "email": "alpha_1794227480844@eval.com",
+        "email": "alpha_1794231918500@eval.com",
         "name": "Tenant Alpha Eval",
         "password": "EvalPass123!",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YmI3MTk4Mi04NWIxLTQyYzQtODk0MC04ODhjZTQ0MTQ3OTIiLCJ0ZW5hbnRJZCI6IjhiZGQ0NmNiLTIxNDAtNDVlNi04OWQwLTYzZDQ3Y2E5OWIyYiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNzQ4MiwiZXhwIjoxNzk0MjMxMDgyfQ.YH05Mb_iuiVNkKZlQlPUmw82QP6n1wG_zjCTa7h6NXY",
-        "tenantId": "8bdd46cb-2140-45e6-89d0-63d47ca99b2b",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5MjA0MjIxYy02M2VkLTQ5ODItODlhNC1hODQzMTcwMjk1NzQiLCJ0ZW5hbnRJZCI6ImMxNzg3MTQ4LWUyMDItNDYwYS05MWExLWUyZjhhNmY4NDMyNiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIzMTkxOSwiZXhwIjoxNzk0MjM1NTE5fQ.ghmAaz936PHK4p3kPXxNByRhINMgM-zJyQjTzzdWQnc",
+        "tenantId": "c1787148-e202-460a-91a1-e2f8a6f84326",
         "raw": {
-          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1YmI3MTk4Mi04NWIxLTQyYzQtODk0MC04ODhjZTQ0MTQ3OTIiLCJ0ZW5hbnRJZCI6IjhiZGQ0NmNiLTIxNDAtNDVlNi04OWQwLTYzZDQ3Y2E5OWIyYiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNzQ4MiwiZXhwIjoxNzk0MjMxMDgyfQ.YH05Mb_iuiVNkKZlQlPUmw82QP6n1wG_zjCTa7h6NXY",
-          "tenantId": "8bdd46cb-2140-45e6-89d0-63d47ca99b2b",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI5MjA0MjIxYy02M2VkLTQ5ODItODlhNC1hODQzMTcwMjk1NzQiLCJ0ZW5hbnRJZCI6ImMxNzg3MTQ4LWUyMDItNDYwYS05MWExLWUyZjhhNmY4NDMyNiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIzMTkxOSwiZXhwIjoxNzk0MjM1NTE5fQ.ghmAaz936PHK4p3kPXxNByRhINMgM-zJyQjTzzdWQnc",
+          "tenantId": "c1787148-e202-460a-91a1-e2f8a6f84326",
           "role": "admin"
         },
         "status": 200,
         "registerStatus": 201
       },
       "beta": {
-        "email": "beta_1794227480844@eval.com",
+        "email": "beta_1794231918500@eval.com",
         "name": "Tenant Beta Eval",
         "password": "EvalPass123!",
-        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNTRkNDAxOC02NjQ3LTQ0NTMtOTQ2Ny02MmM3Y2YyNjM1YmQiLCJ0ZW5hbnRJZCI6ImM4OTM3YzM4LTZhYWYtNDBhMy1hOTY0LWRkZmM4YjAyYTBmMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNzQ4MiwiZXhwIjoxNzk0MjMxMDgyfQ.w-z6QpQU7rM-WjWxS2qOhABJSEIxxzYx5PH__FnCB0U",
-        "tenantId": "c8937c38-6aaf-40a3-a964-ddfc8b02a0f1",
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTNiOTAyYS01YzU1LTQ0N2YtODM0MS0zZDc1ZDFlNjc1YjAiLCJ0ZW5hbnRJZCI6ImQ2NmMzZjBjLWVmMjQtNDcxZi1hZTAxLTIxMmUxNGViNDAxMCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIzMTkxOSwiZXhwIjoxNzk0MjM1NTE5fQ.bn--7f32lKUcwQqPL_w4MB5AOjOYCveBIzSgyg757PE",
+        "tenantId": "d66c3f0c-ef24-471f-ae01-212e14eb4010",
         "raw": {
-          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIzNTRkNDAxOC02NjQ3LTQ0NTMtOTQ2Ny02MmM3Y2YyNjM1YmQiLCJ0ZW5hbnRJZCI6ImM4OTM3YzM4LTZhYWYtNDBhMy1hOTY0LWRkZmM4YjAyYTBmMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIyNzQ4MiwiZXhwIjoxNzk0MjMxMDgyfQ.w-z6QpQU7rM-WjWxS2qOhABJSEIxxzYx5PH__FnCB0U",
-          "tenantId": "c8937c38-6aaf-40a3-a964-ddfc8b02a0f1",
+          "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTNiOTAyYS01YzU1LTQ0N2YtODM0MS0zZDc1ZDFlNjc1YjAiLCJ0ZW5hbnRJZCI6ImQ2NmMzZjBjLWVmMjQtNDcxZi1hZTAxLTIxMmUxNGViNDAxMCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc5NDIzMTkxOSwiZXhwIjoxNzk0MjM1NTE5fQ.bn--7f32lKUcwQqPL_w4MB5AOjOYCveBIzSgyg757PE",
+          "tenantId": "d66c3f0c-ef24-471f-ae01-212e14eb4010",
           "role": "admin"
         },
         "status": 200,
@@ -42,85 +42,215 @@
       {
         "request": {
           "name": "Alpha Product 1",
-          "sku": "ALPHA-1794227480844-1",
+          "sku": "ALPHA-1794231918500-1",
           "description": "Eval product 1",
           "unitPrice": 100,
           "reorderLevel": 50
         },
         "response": {
-          "statusCode": 500,
-          "message": "Internal server error",
-          "timestamp": "2026-11-09T12:31:22.797Z",
-          "path": "/inventory/products"
+          "name": "Alpha Product 1",
+          "sku": "ALPHA-1794231918500-1",
+          "description": "Eval product 1",
+          "unitPrice": 100,
+          "reorderLevel": 50,
+          "id": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+          "createdAt": "2026-11-09T13:45:19.763Z",
+          "updatedAt": "2026-11-09T13:45:19.763Z"
         },
-        "status": 500
+        "status": 201,
+        "id": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+        "stockIn": {
+          "status": 201,
+          "qty": 10
+        }
       },
       {
         "request": {
           "name": "Alpha Product 2",
-          "sku": "ALPHA-1794227480844-2",
+          "sku": "ALPHA-1794231918500-2",
           "description": "Eval product 2",
           "unitPrice": 200,
           "reorderLevel": 5
         },
         "response": {
-          "statusCode": 500,
-          "message": "Internal server error",
-          "timestamp": "2026-11-09T12:31:22.821Z",
-          "path": "/inventory/products"
+          "name": "Alpha Product 2",
+          "sku": "ALPHA-1794231918500-2",
+          "description": "Eval product 2",
+          "unitPrice": 200,
+          "reorderLevel": 5,
+          "id": "61f95bbe-1786-4676-ac90-b2d9186aa999",
+          "createdAt": "2026-11-09T13:45:19.806Z",
+          "updatedAt": "2026-11-09T13:45:19.806Z"
         },
-        "status": 500
+        "status": 201,
+        "id": "61f95bbe-1786-4676-ac90-b2d9186aa999",
+        "stockIn": {
+          "status": 201,
+          "qty": 100
+        }
       },
       {
         "request": {
           "name": "Alpha Product 3",
-          "sku": "ALPHA-1794227480844-3",
+          "sku": "ALPHA-1794231918500-3",
           "description": "Eval product 3",
           "unitPrice": 300,
           "reorderLevel": 5
         },
         "response": {
-          "statusCode": 500,
-          "message": "Internal server error",
-          "timestamp": "2026-11-09T12:31:22.830Z",
-          "path": "/inventory/products"
+          "name": "Alpha Product 3",
+          "sku": "ALPHA-1794231918500-3",
+          "description": "Eval product 3",
+          "unitPrice": 300,
+          "reorderLevel": 5,
+          "id": "42bd77a6-4a51-4b07-b10e-fbe74104535b",
+          "createdAt": "2026-11-09T13:45:19.825Z",
+          "updatedAt": "2026-11-09T13:45:19.825Z"
         },
-        "status": 500
+        "status": 201,
+        "id": "42bd77a6-4a51-4b07-b10e-fbe74104535b",
+        "stockIn": {
+          "status": 201,
+          "qty": 100
+        }
       }
     ],
     "betaProducts": [
       {
         "request": {
           "name": "Beta Product 1",
-          "sku": "BETA-1794227480844-1",
+          "sku": "BETA-1794231918500-1",
           "description": "Beta eval",
           "unitPrice": 55,
           "reorderLevel": 2
         },
         "response": {
-          "statusCode": 500,
-          "message": "Internal server error",
-          "timestamp": "2026-11-09T12:31:24.370Z",
-          "path": "/inventory/products"
+          "name": "Beta Product 1",
+          "sku": "BETA-1794231918500-1",
+          "description": "Beta eval",
+          "unitPrice": 55,
+          "reorderLevel": 2,
+          "id": "8d45ae69-912f-4847-890b-eeed2f805315",
+          "createdAt": "2026-11-09T13:45:22.275Z",
+          "updatedAt": "2026-11-09T13:45:22.275Z"
         },
-        "status": 500
+        "status": 201,
+        "id": "8d45ae69-912f-4847-890b-eeed2f805315"
       }
     ],
-    "alphaSales": [],
-    "finishedAt": "2026-11-09T12:32:06.344Z",
-    "logLineCount": 39
+    "alphaSales": [
+      {
+        "status": 201,
+        "response": {
+          "saleId": "cf32b131-94c3-4601-82e0-9aa86966fbb6",
+          "saleReference": "SALE-d557b51b",
+          "status": "completed",
+          "totalAmount": 100,
+          "paymentStatus": "unpaid",
+          "items": [
+            {
+              "productId": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+              "quantity": 1,
+              "unitPrice": 100
+            }
+          ]
+        },
+        "body": {
+          "items": [
+            {
+              "productId": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+              "quantity": 1,
+              "unitPrice": 100
+            }
+          ]
+        }
+      },
+      {
+        "status": 201,
+        "response": {
+          "saleId": "41397458-de55-41a1-9e46-3a0786693fd7",
+          "saleReference": "SALE-d3d216a8",
+          "status": "completed",
+          "totalAmount": 100,
+          "paymentStatus": "unpaid",
+          "items": [
+            {
+              "productId": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+              "quantity": 1,
+              "unitPrice": 100
+            }
+          ]
+        },
+        "body": {
+          "items": [
+            {
+              "productId": "4e706d21-99b6-46f0-a28f-86902b6ef382",
+              "quantity": 1,
+              "unitPrice": 100
+            }
+          ]
+        }
+      }
+    ],
+    "finishedAt": "2026-11-09T13:45:48.216Z",
+    "logLineCount": 49
   },
   "isolation": {
     "testCases": [
       {
-        "id": "ISO-SETUP",
-        "description": "Setup produced Alpha product ID",
-        "authenticatedContext": "Tenant Alpha",
-        "targetContext": "N/A",
-        "attemptedOperation": "Create product",
-        "expectedResult": "Product created with ID",
-        "actualResult": "No product ID returned",
-        "status": "FAIL"
+        "id": "ISO-001",
+        "description": "Tenant Beta attempts to GET Tenant Alpha product by ID",
+        "authenticatedContext": "Tenant Beta (d66c3f0c-ef24-471f-ae01-212e14eb4010)",
+        "targetContext": "Tenant Alpha product 4e706d21-99b6-46f0-a28f-86902b6ef382",
+        "attemptedOperation": "GET /inventory/products/4e706d21-99b6-46f0-a28f-86902b6ef382",
+        "expectedResult": "HTTP 404 (not found in tenant scope) or 403",
+        "actualResult": "HTTP 404 body={\"statusCode\":404,\"message\":\"Product not found\",\"timestamp\":\"2026-11-09T13:45:22.298Z\",\"path\":\"/inventory/products/4e706d21-99b6-46f0-a28f-86902b6ef382\"}",
+        "status": "PASS",
+        "httpStatus": 404
+      },
+      {
+        "id": "ISO-002",
+        "description": "Tenant Beta attempts to GET sales list; must not see Alpha sales",
+        "authenticatedContext": "Tenant Beta (d66c3f0c-ef24-471f-ae01-212e14eb4010)",
+        "targetContext": "Tenant Alpha sales",
+        "attemptedOperation": "GET /orders",
+        "expectedResult": "HTTP 200 with empty array [] (no Alpha data)",
+        "actualResult": "HTTP 200 count=0 hasAlphaRef=false body=[]",
+        "status": "PASS",
+        "httpStatus": 200
+      },
+      {
+        "id": "ISO-003",
+        "description": "Tenant Beta attempts to GET notifications; must not see Alpha notifications",
+        "authenticatedContext": "Tenant Beta (d66c3f0c-ef24-471f-ae01-212e14eb4010)",
+        "targetContext": "Tenant Alpha notifications",
+        "attemptedOperation": "GET /notifications",
+        "expectedResult": "HTTP 200 with empty array []",
+        "actualResult": "HTTP 200 count=0 body=[]",
+        "status": "PASS",
+        "httpStatus": 200
+      },
+      {
+        "id": "ISO-004",
+        "description": "Tenant Beta attempts to UPDATE Tenant Alpha product price",
+        "authenticatedContext": "Tenant Beta (d66c3f0c-ef24-471f-ae01-212e14eb4010)",
+        "targetContext": "Tenant Alpha product 4e706d21-99b6-46f0-a28f-86902b6ef382",
+        "attemptedOperation": "PATCH /inventory/products/4e706d21-99b6-46f0-a28f-86902b6ef382 {unitPrice:0.01}",
+        "expectedResult": "HTTP 404/403/400 and Alpha price unchanged",
+        "actualResult": "HTTP 404 alphaCheck=200 alphaPrice=100.00 unchanged=true body={\"statusCode\":404,\"message\":\"Product not found\",\"timestamp\":\"2026-11-09T13:45:22.529Z\",\"path\":\"/inventory/products/4e706d21-99b6-46f0-a28f-8",
+        "status": "PASS",
+        "httpStatus": 404
+      },
+      {
+        "id": "ISO-005",
+        "description": "Header injection: Token_Alpha with X-Tenant-Id=Beta; system must trust token claims",
+        "authenticatedContext": "Tenant Alpha token (c1787148-e202-460a-91a1-e2f8a6f84326)",
+        "targetContext": "Spoofed header tenant d66c3f0c-ef24-471f-ae01-212e14eb4010",
+        "attemptedOperation": "GET /inventory/products with X-Tenant-Id header set to Beta",
+        "expectedResult": "Returns Tenant Alpha data; ignores client tenant header",
+        "actualResult": "HTTP 200 seesAlpha=true seesBeta=false count=3 body=[{\"id\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"name\":\"Alpha Product 1\",\"sku\":\"ALPHA-1794231918500-1\",\"description\":\"Eval product 1\",\"unitPrice\":\"100.00\",\"reorderLevel\":50,\"createdA",
+        "status": "PASS",
+        "httpStatus": 200
       }
     ]
   },
@@ -130,211 +260,211 @@
         "endpoint": "POST  /auth/login",
         "concurrency": 1,
         "totalRequests": 12,
-        "avgMs": 342.98,
-        "medianMs": 225.01,
-        "p90Ms": 554.2,
-        "p95Ms": 1273.04,
-        "p99Ms": 1273.04,
-        "minMs": 131.16,
-        "maxMs": 1273.04,
-        "throughputRps": 2.91,
+        "avgMs": 129,
+        "medianMs": 118.69,
+        "p90Ms": 133.63,
+        "p95Ms": 228.01,
+        "p99Ms": 228.01,
+        "minMs": 110.76,
+        "maxMs": 228.01,
+        "throughputRps": 7.73,
         "errorRatePct": 0
       },
       {
         "endpoint": "GET /inventory/products",
         "concurrency": 1,
         "totalRequests": 12,
-        "avgMs": 5.99,
-        "medianMs": 4.7,
-        "p90Ms": 10.26,
-        "p95Ms": 11.53,
-        "p99Ms": 11.53,
-        "minMs": 3.28,
-        "maxMs": 11.53,
-        "throughputRps": 157.89,
-        "errorRatePct": 100
+        "avgMs": 10.65,
+        "medianMs": 10.41,
+        "p90Ms": 12.27,
+        "p95Ms": 13.02,
+        "p99Ms": 13.02,
+        "minMs": 8.3,
+        "maxMs": 13.02,
+        "throughputRps": 90.96,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /inventory/stock-movements",
         "concurrency": 1,
         "totalRequests": 6,
-        "avgMs": 5.18,
-        "medianMs": 4.78,
-        "p90Ms": 6.71,
-        "p95Ms": 6.71,
-        "p99Ms": 6.71,
-        "minMs": 4.22,
-        "maxMs": 6.71,
-        "throughputRps": 180.93,
-        "errorRatePct": 100
+        "avgMs": 22.76,
+        "medianMs": 22.25,
+        "p90Ms": 26.61,
+        "p95Ms": 26.61,
+        "p99Ms": 26.61,
+        "minMs": 20.78,
+        "maxMs": 26.61,
+        "throughputRps": 43.3,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /orders",
         "concurrency": 1,
         "totalRequests": 6,
-        "avgMs": 45.76,
-        "medianMs": 10.26,
-        "p90Ms": 215.32,
-        "p95Ms": 215.32,
-        "p99Ms": 215.32,
-        "minMs": 4.41,
-        "maxMs": 215.32,
-        "throughputRps": 21.48,
-        "errorRatePct": 100
+        "avgMs": 87.13,
+        "medianMs": 81.36,
+        "p90Ms": 131.56,
+        "p95Ms": 131.56,
+        "p99Ms": 131.56,
+        "minMs": 68.07,
+        "maxMs": 131.56,
+        "throughputRps": 11.43,
+        "errorRatePct": 0
       },
       {
         "endpoint": "GET /notifications",
         "concurrency": 1,
         "totalRequests": 12,
-        "avgMs": 9.25,
-        "medianMs": 5.09,
-        "p90Ms": 17.52,
-        "p95Ms": 46.97,
-        "p99Ms": 46.97,
-        "minMs": 2.47,
-        "maxMs": 46.97,
-        "throughputRps": 104.61,
-        "errorRatePct": 100
+        "avgMs": 27.42,
+        "medianMs": 25.94,
+        "p90Ms": 30.03,
+        "p95Ms": 46,
+        "p99Ms": 46,
+        "minMs": 22.78,
+        "maxMs": 46,
+        "throughputRps": 36.03,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST  /auth/login",
         "concurrency": 10,
         "totalRequests": 40,
-        "avgMs": 1116.18,
-        "medianMs": 332.56,
-        "p90Ms": 3645.65,
-        "p95Ms": 4145.58,
-        "p99Ms": 5094.59,
-        "minMs": 188.14,
-        "maxMs": 5094.59,
-        "throughputRps": 6.81,
+        "avgMs": 365.34,
+        "medianMs": 318.6,
+        "p90Ms": 620.09,
+        "p95Ms": 734.52,
+        "p99Ms": 867.74,
+        "minMs": 181.46,
+        "maxMs": 867.74,
+        "throughputRps": 23.16,
         "errorRatePct": 0
       },
       {
         "endpoint": "GET /inventory/products",
         "concurrency": 10,
         "totalRequests": 40,
-        "avgMs": 50.94,
-        "medianMs": 48.9,
-        "p90Ms": 90.56,
-        "p95Ms": 99.15,
-        "p99Ms": 106.85,
-        "minMs": 16,
-        "maxMs": 106.85,
-        "throughputRps": 151.58,
-        "errorRatePct": 100
+        "avgMs": 93.17,
+        "medianMs": 40.17,
+        "p90Ms": 305.87,
+        "p95Ms": 325.15,
+        "p99Ms": 365.57,
+        "minMs": 11.04,
+        "maxMs": 365.57,
+        "throughputRps": 88.11,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /inventory/stock-movements",
         "concurrency": 10,
         "totalRequests": 20,
-        "avgMs": 37.31,
-        "medianMs": 35.57,
-        "p90Ms": 51.16,
-        "p95Ms": 59.83,
-        "p99Ms": 66.67,
-        "minMs": 19,
-        "maxMs": 66.67,
-        "throughputRps": 192.54,
-        "errorRatePct": 100
+        "avgMs": 128.18,
+        "medianMs": 127.9,
+        "p90Ms": 140.7,
+        "p95Ms": 143.64,
+        "p99Ms": 146.73,
+        "minMs": 109.54,
+        "maxMs": 146.73,
+        "throughputRps": 73.74,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /orders",
         "concurrency": 10,
         "totalRequests": 20,
-        "avgMs": 43.73,
-        "medianMs": 38.84,
-        "p90Ms": 65.63,
-        "p95Ms": 70.61,
-        "p99Ms": 82.22,
-        "minMs": 19.5,
-        "maxMs": 82.22,
-        "throughputRps": 172.38,
-        "errorRatePct": 100
+        "avgMs": 395.46,
+        "medianMs": 372.13,
+        "p90Ms": 594.52,
+        "p95Ms": 680.86,
+        "p99Ms": 716.79,
+        "minMs": 140.41,
+        "maxMs": 716.79,
+        "throughputRps": 23.15,
+        "errorRatePct": 0
       },
       {
         "endpoint": "GET /notifications",
         "concurrency": 10,
         "totalRequests": 40,
-        "avgMs": 39.07,
-        "medianMs": 34.31,
-        "p90Ms": 62.62,
-        "p95Ms": 67.53,
-        "p99Ms": 73.01,
-        "minMs": 21.28,
-        "maxMs": 73.01,
-        "throughputRps": 231.76,
-        "errorRatePct": 100
+        "avgMs": 144.51,
+        "medianMs": 96.26,
+        "p90Ms": 364.67,
+        "p95Ms": 398.27,
+        "p99Ms": 494.8,
+        "minMs": 29.18,
+        "maxMs": 494.8,
+        "throughputRps": 57.98,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST  /auth/login",
         "concurrency": 25,
         "totalRequests": 50,
-        "avgMs": 3223.14,
-        "medianMs": 2789.39,
-        "p90Ms": 4656.29,
-        "p95Ms": 5021.53,
-        "p99Ms": 5523.52,
-        "minMs": 1793.84,
-        "maxMs": 5523.52,
-        "throughputRps": 6.83,
+        "avgMs": 811.94,
+        "medianMs": 936.91,
+        "p90Ms": 1028.99,
+        "p95Ms": 1058.95,
+        "p99Ms": 1170.32,
+        "minMs": 251.64,
+        "maxMs": 1170.32,
+        "throughputRps": 24.72,
         "errorRatePct": 0
       },
       {
         "endpoint": "GET /inventory/products",
         "concurrency": 25,
         "totalRequests": 50,
-        "avgMs": 81.5,
-        "medianMs": 74.14,
-        "p90Ms": 117.39,
-        "p95Ms": 125.2,
-        "p99Ms": 135.22,
-        "minMs": 47.4,
-        "maxMs": 135.22,
-        "throughputRps": 226.28,
-        "errorRatePct": 100
+        "avgMs": 171.17,
+        "medianMs": 178.18,
+        "p90Ms": 229.64,
+        "p95Ms": 255.16,
+        "p99Ms": 269.68,
+        "minMs": 90.38,
+        "maxMs": 269.68,
+        "throughputRps": 128.11,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /inventory/stock-movements",
         "concurrency": 25,
         "totalRequests": 25,
-        "avgMs": 66.22,
-        "medianMs": 59.07,
-        "p90Ms": 118.67,
-        "p95Ms": 120.39,
-        "p99Ms": 126.55,
-        "minMs": 24,
-        "maxMs": 126.55,
-        "throughputRps": 180.4,
-        "errorRatePct": 100
+        "avgMs": 229.78,
+        "medianMs": 221.26,
+        "p90Ms": 327.95,
+        "p95Ms": 328.3,
+        "p99Ms": 336.48,
+        "minMs": 133.29,
+        "maxMs": 336.48,
+        "throughputRps": 71.94,
+        "errorRatePct": 0
       },
       {
         "endpoint": "POST /orders",
         "concurrency": 25,
         "totalRequests": 25,
-        "avgMs": 120.76,
-        "medianMs": 120.11,
-        "p90Ms": 128.54,
-        "p95Ms": 130.05,
-        "p99Ms": 134.83,
-        "minMs": 110.15,
-        "maxMs": 134.83,
-        "throughputRps": 169.38,
-        "errorRatePct": 100
+        "avgMs": 704.5,
+        "medianMs": 733.93,
+        "p90Ms": 893.43,
+        "p95Ms": 894.36,
+        "p99Ms": 902.44,
+        "minMs": 511.75,
+        "maxMs": 902.44,
+        "throughputRps": 27.22,
+        "errorRatePct": 0
       },
       {
         "endpoint": "GET /notifications",
         "concurrency": 25,
         "totalRequests": 50,
-        "avgMs": 182.21,
-        "medianMs": 155,
-        "p90Ms": 315.36,
-        "p95Ms": 315.54,
-        "p99Ms": 318.23,
-        "minMs": 92.84,
-        "maxMs": 318.23,
-        "throughputRps": 104.12,
-        "errorRatePct": 100
+        "avgMs": 347.06,
+        "medianMs": 338.02,
+        "p90Ms": 406.19,
+        "p95Ms": 422.97,
+        "p99Ms": 432.23,
+        "minMs": 286.29,
+        "maxMs": 432.23,
+        "throughputRps": 68.36,
+        "errorRatePct": 0
       }
     ]
   },
@@ -342,122 +472,132 @@
     "rows": [
       {
         "tenantCount": 2,
-        "totalActiveVUsers": 0,
-        "totalRequests": 0,
-        "avgMs": 0,
-        "p95Ms": 0,
-        "throughputRps": 0,
+        "totalActiveVUsers": 2,
+        "totalRequests": 12,
+        "avgMs": 57.72,
+        "p95Ms": 134.66,
+        "throughputRps": 32.57,
         "errorRatePct": 0,
-        "notes": "Provisioned 0/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        "notes": "Provisioned 2/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
       },
       {
         "tenantCount": 5,
-        "totalActiveVUsers": 0,
-        "totalRequests": 0,
-        "avgMs": 0,
-        "p95Ms": 0,
-        "throughputRps": 0,
+        "totalActiveVUsers": 5,
+        "totalRequests": 30,
+        "avgMs": 93.72,
+        "p95Ms": 235.4,
+        "throughputRps": 49.93,
         "errorRatePct": 0,
-        "notes": "Provisioned 0/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        "notes": "Provisioned 5/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
       },
       {
         "tenantCount": 15,
-        "totalActiveVUsers": 0,
-        "totalRequests": 0,
-        "avgMs": 0,
-        "p95Ms": 0,
-        "throughputRps": 0,
+        "totalActiveVUsers": 15,
+        "totalRequests": 90,
+        "avgMs": 317.56,
+        "p95Ms": 823.71,
+        "throughputRps": 44.19,
         "errorRatePct": 0,
-        "notes": "Provisioned 0/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+        "notes": "Provisioned 15/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
       }
     ]
   },
   "summary": {
     "isolation": {
-      "total": 1,
-      "passed": 0,
-      "failed": 1
+      "total": 5,
+      "passed": 5,
+      "failed": 0
     },
     "performance": {
       "rows": 15,
       "p95TargetMs": 1000,
-      "rowsMeetingP95": 12
+      "rowsMeetingP95": 14
     },
     "scalability": {
       "rows": [
         {
           "tenantCount": 2,
-          "totalActiveVUsers": 0,
-          "totalRequests": 0,
-          "avgMs": 0,
-          "p95Ms": 0,
-          "throughputRps": 0,
+          "totalActiveVUsers": 2,
+          "totalRequests": 12,
+          "avgMs": 57.72,
+          "p95Ms": 134.66,
+          "throughputRps": 32.57,
           "errorRatePct": 0,
-          "notes": "Provisioned 0/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+          "notes": "Provisioned 2/2 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
         },
         {
           "tenantCount": 5,
-          "totalActiveVUsers": 0,
-          "totalRequests": 0,
-          "avgMs": 0,
-          "p95Ms": 0,
-          "throughputRps": 0,
+          "totalActiveVUsers": 5,
+          "totalRequests": 30,
+          "avgMs": 93.72,
+          "p95Ms": 235.4,
+          "throughputRps": 49.93,
           "errorRatePct": 0,
-          "notes": "Provisioned 0/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+          "notes": "Provisioned 5/5 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
         },
         {
           "tenantCount": 15,
-          "totalActiveVUsers": 0,
-          "totalRequests": 0,
-          "avgMs": 0,
-          "p95Ms": 0,
-          "throughputRps": 0,
+          "totalActiveVUsers": 15,
+          "totalRequests": 90,
+          "avgMs": 317.56,
+          "p95Ms": 823.71,
+          "throughputRps": 44.19,
           "errorRatePct": 0,
-          "notes": "Provisioned 0/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
+          "notes": "Provisioned 15/15 tenants successfully; mixed GET products + POST order; 6 req/tenant. Host resource impact not sampled in-script (see environment notes)."
         }
       ]
     },
-    "finishedAt": "2026-11-09T12:32:06.344Z"
+    "finishedAt": "2026-11-09T13:45:48.216Z"
   },
   "logs": [
-    "[2026-11-09T12:31:20.843Z] Evaluation start. Node v24.21.0",
-    "[2026-11-09T12:31:20.844Z] Targets: auth=http://localhost:3001 inventory=http://localhost:3002 orders=http://localhost:3003 notifications=http://localhost:3004",
-    "[2026-11-09T12:31:20.844Z] Registering Tenant Alpha: alpha_1794227480844@eval.com",
-    "[2026-11-09T12:31:21.982Z] Alpha register status=201 body={\"tenantId\":\"8bdd46cb-2140-45e6-89d0-63d47ca99b2b\",\"userId\":\"5bb71982-85b1-42c4-8940-888ce4414792\",\"email\":\"alpha_1794227480844@eval.com\"}",
-    "[2026-11-09T12:31:21.983Z] Registering Tenant Beta: beta_1794227480844@eval.com",
-    "[2026-11-09T12:31:22.391Z] Beta register status=201 body={\"tenantId\":\"c8937c38-6aaf-40a3-a964-ddfc8b02a0f1\",\"userId\":\"354d4018-6647-4453-9467-62c7cf2635bd\",\"email\":\"beta_1794227480844@eval.com\"}",
-    "[2026-11-09T12:31:22.701Z] Alpha login status=200 tenant=8bdd46cb-2140-45e6-89d0-63d47ca99b2b token=yes",
-    "[2026-11-09T12:31:22.701Z] Beta login status=200 tenant=c8937c38-6aaf-40a3-a964-ddfc8b02a0f1 token=yes",
-    "[2026-11-09T12:31:22.807Z] Create alpha product 1: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:31:22.797Z\",\"path\":\"/inventory/products\"}",
-    "[2026-11-09T12:31:22.825Z] Create alpha product 2: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:31:22.821Z\",\"path\":\"/inventory/products\"}",
-    "[2026-11-09T12:31:22.832Z] Create alpha product 3: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:31:22.830Z\",\"path\":\"/inventory/products\"}",
-    "[2026-11-09T12:31:24.374Z] Create beta product: status=500 {\"statusCode\":500,\"message\":\"Internal server error\",\"timestamp\":\"2026-11-09T12:31:24.370Z\",\"path\":\"/inventory/products\"}",
-    "[2026-11-09T12:31:24.376Z] ISOLATION ISO-SETUP: FAIL - No product ID returned",
-    "[2026-11-09T12:31:25.569Z] Perf tenant login status=200",
-    "[2026-11-09T12:31:25.578Z] Perf product id=undefined status=500",
-    "[2026-11-09T12:31:25.578Z] Performance level concurrency=1 iters/user=12",
-    "[2026-11-09T12:31:30.203Z] Performance level concurrency=10 iters/user=4",
-    "[2026-11-09T12:31:36.738Z] Performance level concurrency=25 iters/user=2",
-    "[2026-11-09T12:31:45.051Z] PERF POST  /auth/login c=1 avg=342.98 p95=1273.04 err=0% n=12",
-    "[2026-11-09T12:31:45.052Z] PERF GET /inventory/products c=1 avg=5.99 p95=11.53 err=100% n=12",
-    "[2026-11-09T12:31:45.052Z] PERF POST /inventory/stock-movements c=1 avg=5.18 p95=6.71 err=100% n=6",
-    "[2026-11-09T12:31:45.052Z] PERF POST /orders c=1 avg=45.76 p95=215.32 err=100% n=6",
-    "[2026-11-09T12:31:45.052Z] PERF GET /notifications c=1 avg=9.25 p95=46.97 err=100% n=12",
-    "[2026-11-09T12:31:45.052Z] PERF POST  /auth/login c=10 avg=1116.18 p95=4145.58 err=0% n=40",
-    "[2026-11-09T12:31:45.052Z] PERF GET /inventory/products c=10 avg=50.94 p95=99.15 err=100% n=40",
-    "[2026-11-09T12:31:45.052Z] PERF POST /inventory/stock-movements c=10 avg=37.31 p95=59.83 err=100% n=20",
-    "[2026-11-09T12:31:45.052Z] PERF POST /orders c=10 avg=43.73 p95=70.61 err=100% n=20",
-    "[2026-11-09T12:31:45.052Z] PERF GET /notifications c=10 avg=39.07 p95=67.53 err=100% n=40",
-    "[2026-11-09T12:31:45.052Z] PERF POST  /auth/login c=25 avg=3223.14 p95=5021.53 err=0% n=50",
-    "[2026-11-09T12:31:45.052Z] PERF GET /inventory/products c=25 avg=81.5 p95=125.2 err=100% n=50",
-    "[2026-11-09T12:31:45.052Z] PERF POST /inventory/stock-movements c=25 avg=66.22 p95=120.39 err=100% n=25",
-    "[2026-11-09T12:31:45.052Z] PERF POST /orders c=25 avg=120.76 p95=130.05 err=100% n=25",
-    "[2026-11-09T12:31:45.052Z] PERF GET /notifications c=25 avg=182.21 p95=315.54 err=100% n=50",
-    "[2026-11-09T12:31:45.052Z] Scalability provisioning 2 tenants",
-    "[2026-11-09T12:31:53.309Z] SCALE tenants=2 vusers=0 avg=0 p95=0 err=0% thr=0",
-    "[2026-11-09T12:31:53.309Z] Scalability provisioning 5 tenants",
-    "[2026-11-09T12:31:56.831Z] SCALE tenants=5 vusers=0 avg=0 p95=0 err=0% thr=0",
-    "[2026-11-09T12:31:56.831Z] Scalability provisioning 15 tenants",
-    "[2026-11-09T12:32:06.343Z] SCALE tenants=15 vusers=0 avg=0 p95=0 err=0% thr=0"
+    "[2026-11-09T13:45:18.500Z] Evaluation start. Node v24.21.0",
+    "[2026-11-09T13:45:18.500Z] Targets: auth=http://localhost:3001 inventory=http://localhost:3002 orders=http://localhost:3003 notifications=http://localhost:3004",
+    "[2026-11-09T13:45:18.500Z] Registering Tenant Alpha: alpha_1794231918500@eval.com",
+    "[2026-11-09T13:45:18.962Z] Alpha register status=201 body={\"tenantId\":\"c1787148-e202-460a-91a1-e2f8a6f84326\",\"userId\":\"9204221c-63ed-4982-89a4-a84317029574\",\"email\":\"alpha_1794231918500@eval.com\"}",
+    "[2026-11-09T13:45:18.963Z] Registering Tenant Beta: beta_1794231918500@eval.com",
+    "[2026-11-09T13:45:19.400Z] Beta register status=201 body={\"tenantId\":\"d66c3f0c-ef24-471f-ae01-212e14eb4010\",\"userId\":\"693b902a-5c55-447f-8341-3d75d1e675b0\",\"email\":\"beta_1794231918500@eval.com\"}",
+    "[2026-11-09T13:45:19.647Z] Alpha login status=200 tenant=c1787148-e202-460a-91a1-e2f8a6f84326 token=yes",
+    "[2026-11-09T13:45:19.647Z] Beta login status=200 tenant=d66c3f0c-ef24-471f-ae01-212e14eb4010 token=yes",
+    "[2026-11-09T13:45:19.796Z] Create alpha product 1: status=201 {\"name\":\"Alpha Product 1\",\"sku\":\"ALPHA-1794231918500-1\",\"description\":\"Eval product 1\",\"unitPrice\":100,\"reorderLevel\":50,\"id\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"createdAt\":\"20",
+    "[2026-11-09T13:45:19.816Z] Create alpha product 2: status=201 {\"name\":\"Alpha Product 2\",\"sku\":\"ALPHA-1794231918500-2\",\"description\":\"Eval product 2\",\"unitPrice\":200,\"reorderLevel\":5,\"id\":\"61f95bbe-1786-4676-ac90-b2d9186aa999\",\"createdAt\":\"202",
+    "[2026-11-09T13:45:19.839Z] Create alpha product 3: status=201 {\"name\":\"Alpha Product 3\",\"sku\":\"ALPHA-1794231918500-3\",\"description\":\"Eval product 3\",\"unitPrice\":300,\"reorderLevel\":5,\"id\":\"42bd77a6-4a51-4b07-b10e-fbe74104535b\",\"createdAt\":\"202",
+    "[2026-11-09T13:45:19.954Z] Stock-in 4e706d21-99b6-46f0-a28f-86902b6ef382: status=201 qty=10 {\"productId\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"previousStock\":0,\"newStock\":10,\"movementId\":\"09961a9b-9cdf-4bfd-9a9a-678348edd8d5\"}",
+    "[2026-11-09T13:45:19.990Z] Stock-in 61f95bbe-1786-4676-ac90-b2d9186aa999: status=201 qty=100 {\"productId\":\"61f95bbe-1786-4676-ac90-b2d9186aa999\",\"previousStock\":0,\"newStock\":100,\"movementId\":\"739bcf52-a605-481c-9e60-e7ef5a76d5b7\"}",
+    "[2026-11-09T13:45:20.025Z] Stock-in 42bd77a6-4a51-4b07-b10e-fbe74104535b: status=201 qty=100 {\"productId\":\"42bd77a6-4a51-4b07-b10e-fbe74104535b\",\"previousStock\":0,\"newStock\":100,\"movementId\":\"8c3eac56-d569-434a-8a27-f8ccd7310d8f\"}",
+    "[2026-11-09T13:45:20.565Z] Create alpha sale 1: status=201 {\"saleId\":\"cf32b131-94c3-4601-82e0-9aa86966fbb6\",\"saleReference\":\"SALE-d557b51b\",\"status\":\"completed\",\"totalAmount\":100,\"paymentStatus\":\"unpaid\",\"items\":[{\"productId\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"quantity\":1,\"",
+    "[2026-11-09T13:45:20.677Z] Create alpha sale 2: status=201 {\"saleId\":\"41397458-de55-41a1-9e46-3a0786693fd7\",\"saleReference\":\"SALE-d3d216a8\",\"status\":\"completed\",\"totalAmount\":100,\"paymentStatus\":\"unpaid\",\"items\":[{\"productId\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"quantity\":1,\"",
+    "[2026-11-09T13:45:20.734Z] Low-stock trigger move: status=201 {\"productId\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"previousStock\":8,\"newStock\":3,\"movementId\":\"e2e38e73-fa3c-4af6-95e5-272bc9849577\"}",
+    "[2026-11-09T13:45:22.288Z] Create beta product: status=201 {\"name\":\"Beta Product 1\",\"sku\":\"BETA-1794231918500-1\",\"description\":\"Beta eval\",\"unitPrice\":55,\"reorderLevel\":2,\"id\":\"8d45ae69-912f-4847-890b-eeed2f805315\",\"createdAt\":\"2026-11-09T",
+    "[2026-11-09T13:45:22.558Z] ISOLATION ISO-001: PASS - HTTP 404 body={\"statusCode\":404,\"message\":\"Product not found\",\"timestamp\":\"2026-11-09T13:45:22.298Z\",\"path\":\"/inventory/products/4e706d21-99b6-46f0-a28f-86902b6ef382\"}",
+    "[2026-11-09T13:45:22.558Z] ISOLATION ISO-002: PASS - HTTP 200 count=0 hasAlphaRef=false body=[]",
+    "[2026-11-09T13:45:22.558Z] ISOLATION ISO-003: PASS - HTTP 200 count=0 body=[]",
+    "[2026-11-09T13:45:22.558Z] ISOLATION ISO-004: PASS - HTTP 404 alphaCheck=200 alphaPrice=100.00 unchanged=true body={\"statusCode\":404,\"message\":\"Product not found\",\"timestamp\":\"2026-11-09T13:45:22.529Z\",\"path\":\"/inventory/products/4e706d21-99b6-46f0-a28f-8",
+    "[2026-11-09T13:45:22.558Z] ISOLATION ISO-005: PASS - HTTP 200 seesAlpha=true seesBeta=false count=3 body=[{\"id\":\"4e706d21-99b6-46f0-a28f-86902b6ef382\",\"name\":\"Alpha Product 1\",\"sku\":\"ALPHA-1794231918500-1\",\"description\":\"Eval product 1\",\"unitPrice\":\"100.00\",\"reorderLevel\":50,\"createdA",
+    "[2026-11-09T13:45:23.182Z] Perf tenant login status=200",
+    "[2026-11-09T13:45:23.331Z] Perf product id=bf67a3c8-b9d1-4e09-acbd-f53ec1049679 status=201",
+    "[2026-11-09T13:45:23.331Z] Performance level concurrency=1 iters/user=12",
+    "[2026-11-09T13:45:26.013Z] Performance level concurrency=10 iters/user=4",
+    "[2026-11-09T13:45:30.019Z] Performance level concurrency=25 iters/user=2",
+    "[2026-11-09T13:45:34.430Z] PERF POST  /auth/login c=1 avg=129 p95=228.01 err=0% n=12",
+    "[2026-11-09T13:45:34.431Z] PERF GET /inventory/products c=1 avg=10.65 p95=13.02 err=0% n=12",
+    "[2026-11-09T13:45:34.431Z] PERF POST /inventory/stock-movements c=1 avg=22.76 p95=26.61 err=0% n=6",
+    "[2026-11-09T13:45:34.431Z] PERF POST /orders c=1 avg=87.13 p95=131.56 err=0% n=6",
+    "[2026-11-09T13:45:34.431Z] PERF GET /notifications c=1 avg=27.42 p95=46 err=0% n=12",
+    "[2026-11-09T13:45:34.431Z] PERF POST  /auth/login c=10 avg=365.34 p95=734.52 err=0% n=40",
+    "[2026-11-09T13:45:34.431Z] PERF GET /inventory/products c=10 avg=93.17 p95=325.15 err=0% n=40",
+    "[2026-11-09T13:45:34.431Z] PERF POST /inventory/stock-movements c=10 avg=128.18 p95=143.64 err=0% n=20",
+    "[2026-11-09T13:45:34.431Z] PERF POST /orders c=10 avg=395.46 p95=680.86 err=0% n=20",
+    "[2026-11-09T13:45:34.431Z] PERF GET /notifications c=10 avg=144.51 p95=398.27 err=0% n=40",
+    "[2026-11-09T13:45:34.431Z] PERF POST  /auth/login c=25 avg=811.94 p95=1058.95 err=0% n=50",
+    "[2026-11-09T13:45:34.431Z] PERF GET /inventory/products c=25 avg=171.17 p95=255.16 err=0% n=50",
+    "[2026-11-09T13:45:34.431Z] PERF POST /inventory/stock-movements c=25 avg=229.78 p95=328.3 err=0% n=25",
+    "[2026-11-09T13:45:34.431Z] PERF POST /orders c=25 avg=704.5 p95=894.36 err=0% n=25",
+    "[2026-11-09T13:45:34.431Z] PERF GET /notifications c=25 avg=347.06 p95=422.97 err=0% n=50",
+    "[2026-11-09T13:45:34.431Z] Scalability provisioning 2 tenants",
+    "[2026-11-09T13:45:36.147Z] SCALE tenants=2 vusers=2 avg=57.72 p95=134.66 err=0% thr=32.57",
+    "[2026-11-09T13:45:36.147Z] Scalability provisioning 5 tenants",
+    "[2026-11-09T13:45:38.887Z] SCALE tenants=5 vusers=5 avg=93.72 p95=235.4 err=0% thr=49.93",
+    "[2026-11-09T13:45:38.887Z] Scalability provisioning 15 tenants",
+    "[2026-11-09T13:45:48.215Z] SCALE tenants=15 vusers=15 avg=317.56 p95=823.71 err=0% thr=44.19"
   ]
 }
