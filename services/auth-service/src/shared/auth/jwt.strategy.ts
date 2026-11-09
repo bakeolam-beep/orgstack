@@ -21,14 +21,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new Error('JWT_SECRET is not defined');
     }
 
+    console.log('[AuthService] JWT_SECRET:', secret);
+
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken() as (req: unknown) => string | null,
+      jwtFromRequest: (req: any) => {
+        console.log('[AuthService JwtStrategy] jwtFromRequest called, headers:', req.headers?.authorization);
+        return ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+      },
       ignoreExpiration: false,
       secretOrKey: secret,
     });
   }
 
   validate(payload: JwtPayload): AuthenticatedRequestUser {
+    console.log('[AuthService JwtStrategy] validate called with payload:', payload);
     if (
       typeof payload?.userId !== 'string' ||
       payload.userId.length === 0 ||

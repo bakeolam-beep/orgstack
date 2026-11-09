@@ -29,6 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: JwtPayload): AuthenticatedRequestUser {
+    console.log('[JwtStrategy] validate called with payload:', payload);
     if (
       typeof payload?.userId !== 'string' ||
       payload.userId.length === 0 ||

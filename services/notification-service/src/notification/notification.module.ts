@@ -8,7 +8,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { Notification } from './entities/notification.entity.js';
 import { NotificationService } from './notification.service.js';
 import { NotificationController } from './notification.controller.js';
-import { RabbitmqConsumerService } from './rabbitmq-consumer.service.js';
 import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
 import { JwtStrategy } from '../shared/auth/jwt.strategy.js';
 
@@ -30,7 +29,6 @@ import { JwtStrategy } from '../shared/auth/jwt.strategy.js';
   controllers: [NotificationController],
   providers: [
     NotificationService,
-    RabbitmqConsumerService,
     JwtStrategy,
     {
       provide: TenantConnectionService,
