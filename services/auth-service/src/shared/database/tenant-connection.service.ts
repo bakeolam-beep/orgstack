@@ -14,6 +14,9 @@ interface ColumnMetadata {
   isUnique: boolean;
   isNullable: boolean;
   enum?: unknown[];
+  createDate?: boolean;
+  updateDate?: boolean;
+  default?: unknown;
 }
 
 interface RelationMetadata {
@@ -59,7 +62,7 @@ export class TenantConnectionService {
 
     await queryRunner.connect();
     try {
-      await queryRunner.query(`SET LOCAL search_path TO ${searchPath}`);
+      await queryRunner.query(`SET search_path TO ${searchPath}`);
       return await operation(queryRunner, schema);
     } finally {
       await queryRunner.release();
@@ -72,12 +75,14 @@ export class TenantConnectionService {
   ): Promise<void> {
     const schema = this.getTenantSchema(tenantId);
     const quotedSchema = this.quoteIdentifier(schema);
+    const searchPath = `${quotedSchema}, public`;
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
       await queryRunner.query(`CREATE SCHEMA IF NOT EXISTS ${quotedSchema}`);
+      await queryRunner.query(`SET search_path TO ${searchPath}`);
       await this.runTenantTableMigrations(queryRunner, quotedSchema, entities);
       await queryRunner.commitTransaction();
     } catch (error) {
@@ -103,6 +108,7 @@ export class TenantConnectionService {
       for (const column of entity.columns as unknown as ColumnMetadata[]) {
         let colType: string;
         let isUuidPrimary = false;
+        let defaultValue: string | null = null;
         if (column.type === String) colType = 'varchar';
         else if ((column.type === Number || column.type === 'uuid' || column.type === 'UUID') && column.isPrimary) {
           colType = 'uuid';
@@ -124,6 +130,20 @@ export class TenantConnectionService {
         else if (typeof column.type === 'string') colType = column.type;
         else colType = 'varchar';
 
+        // Handle CreateDateColumn and UpdateDateColumn
+        const columnMeta = column as unknown as { createDate?: boolean; updateDate?: boolean; default?: unknown };
+        if (columnMeta.createDate) {
+          defaultValue = 'DEFAULT CURRENT_TIMESTAMP';
+        } else if (columnMeta.updateDate) {
+          defaultValue = 'DEFAULT CURRENT_TIMESTAMP';
+        } else if (column.default !== undefined && column.default !== null) {
+          if (typeof column.default === 'function') {
+            defaultValue = `DEFAULT ${column.default()}`;
+          } else {
+            defaultValue = `DEFAULT ${column.default}`;
+          }
+        }
+
         let colDef = `${this.quoteIdentifier(column.propertyName)} ${colType}`;
         if (column.isPrimary) colDef += ' PRIMARY KEY';
         if (column.isGenerated) {
@@ -136,6 +156,7 @@ export class TenantConnectionService {
         if (column.isUnique) colDef += ' UNIQUE';
         if (column.isNullable) colDef += ' NULL';
         else colDef += ' NOT NULL';
+        if (defaultValue) colDef += ` ${defaultValue}`;
         columns.push(colDef);
       }
 

@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
 import { Product } from './entities/product.entity.js';
 import { StockMovement } from './entities/stock-movement.entity.js';
@@ -10,10 +12,22 @@ import { InventoryService } from './inventory.service.js';
 import { InventoryController } from './inventory.controller.js';
 import { RabbitmqProducerService } from './rabbitmq-producer.service.js';
 import { TenantConnectionService } from '../shared/database/tenant-connection.service.js';
+import { JwtStrategy } from '../shared/auth/jwt.strategy.js';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product, StockMovement]),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+        signOptions: {
+          expiresIn: configService.get<string>('JWT_EXPIRES_IN', '1d'),
+        },
+      }),
+    }),
     ClientsModule.registerAsync([
       {
         name: 'RABBITMQ_SERVICE',
@@ -34,6 +48,7 @@ import { TenantConnectionService } from '../shared/database/tenant-connection.se
   providers: [
     InventoryService,
     RabbitmqProducerService,
+    JwtStrategy,
     {
       provide: TenantConnectionService,
       useFactory: (dataSource: DataSource) => new TenantConnectionService(dataSource),

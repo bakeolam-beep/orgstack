@@ -33,6 +33,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     } else if (exception instanceof Error) {
       message = 'Internal server error';
+      console.error('Unhandled error:', exception);
     }
 
     response.status(status).json({
