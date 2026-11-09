@@ -13,7 +13,7 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "../..",
+    "rootDir": "./src",
     "paths": {
       "@orgstack/database": ["../../database/index.ts"],
       "@orgstack/database/*": ["../../database/*"],
@@ -25,7 +25,9 @@
     "skipLibCheck": true,
     "strict": true,
     "strictPropertyInitialization": false,
+    "useDefineForClassFields": false,
     "types": ["vitest/globals", "node", "passport-jwt"]
   },
-  "include": ["src/**/*", "test/**/*", "../../database/**/*", "../../auth/**/*", "../../auth/passport-jwt.d.ts"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }

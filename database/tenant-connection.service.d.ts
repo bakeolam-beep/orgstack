@@ -1,4 +1,4 @@
-import { DataSource, EntityMetadata, QueryRunner } from "typeorm";
+import { DataSource, EntityMetadata, QueryRunner } from 'typeorm';
 export interface AuthenticatedTenantUser {
     userId: string;
     tenantId: string;

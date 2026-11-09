@@ -13,10 +13,9 @@ exports.TenantConnectionService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 let TenantConnectionService = class TenantConnectionService {
-    dataSource;
-    tenantIdPattern = /^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$/;
     constructor(dataSource) {
         this.dataSource = dataSource;
+        this.tenantIdPattern = /^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$/;
     }
     validateTenantId(tenantId) {
         if (typeof tenantId !== 'string' || !this.tenantIdPattern.test(tenantId)) {
