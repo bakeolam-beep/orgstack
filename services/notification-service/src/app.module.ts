@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'node:path';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+import { NotificationModule } from './notification/notification.module.js';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { AppService } from './app.service.js';
         synchronize: false,
       }),
     }),
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
