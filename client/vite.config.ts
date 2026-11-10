@@ -15,22 +15,22 @@ export default defineConfig({
       '/api/auth': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/auth/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/api/inventory': {
         target: 'http://localhost:3002',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/inventory/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/api/orders': {
         target: 'http://localhost:3003',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/orders/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/api/notifications': {
         target: 'http://localhost:3004',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/notifications/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
