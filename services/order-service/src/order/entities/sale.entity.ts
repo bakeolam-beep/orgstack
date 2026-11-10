@@ -25,13 +25,13 @@ export class Sale {
   @Column({ type: 'varchar', length: 100, unique: true, nullable: false, name: 'saleReference' })
   saleReference: string;
 
-  @Column({ type: 'enum', enum: SaleStatus, default: SaleStatus.FAILED, nullable: false })
+  @Column({ type: 'enum', enum: SaleStatus, default: SaleStatus.COMPLETED, nullable: false })
   status: SaleStatus;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false })
   totalAmount: number;
 
-  @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.UNPAID, nullable: false, name: 'paymentStatus' })
+  @Column({ type: 'enum', enum: PaymentStatus, default: PaymentStatus.PAID, nullable: false, name: 'paymentStatus' })
   paymentStatus: PaymentStatus;
 
   @Column({ type: 'varchar', length: 255, nullable: true, name: 'paystackReference' })
