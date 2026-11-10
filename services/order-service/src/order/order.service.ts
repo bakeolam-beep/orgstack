@@ -61,7 +61,7 @@ export class OrderService {
       const sale = queryRunner.manager.create(Sale, {
         id: uuidv4(),
         saleReference,
-        status: SaleStatus.PENDING,
+        status: SaleStatus.FAILED,
         totalAmount,
         paymentStatus: PaymentStatus.UNPAID,
         paystackReference: null,
@@ -108,12 +108,12 @@ export class OrderService {
         }
       }
 
-      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.PENDING });
+      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.FAILED });
 
       return {
         saleId: savedSale.id,
         saleReference,
-        status: SaleStatus.PENDING,
+        status: SaleStatus.FAILED,
         totalAmount,
         paymentStatus: PaymentStatus.UNPAID,
         items: dto.items,
@@ -127,8 +127,8 @@ export class OrderService {
       if (!sale) {
         throw new NotFoundException('Sale not found');
       }
-      if (sale.status !== SaleStatus.PENDING && sale.status !== SaleStatus.COMPLETED) {
-        throw new BadRequestException('Sale must be pending or completed before payment');
+      if (sale.status !== SaleStatus.FAILED && sale.status !== SaleStatus.COMPLETED) {
+        throw new BadRequestException('Sale must be failed or completed before payment');
       }
       if (sale.paymentStatus === PaymentStatus.PAID) {
         throw new BadRequestException('Sale already paid');
@@ -257,12 +257,11 @@ export class OrderService {
     return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sales = await queryRunner.manager.find(Sale);
       const paidSales = sales.filter((s: Sale) => s.paymentStatus === PaymentStatus.PAID);
-      const pendingSales = sales.filter((s: Sale) => s.status === SaleStatus.PENDING);
       const totalRevenue = paidSales.reduce((sum: number, s: Sale) => sum + Number(s.totalAmount ?? 0), 0);
       return {
         totalSales: paidSales.length,
         totalRevenue,
-        pendingPayments: pendingSales.length,
+        pendingPayments: 0,
       };
     });
   }

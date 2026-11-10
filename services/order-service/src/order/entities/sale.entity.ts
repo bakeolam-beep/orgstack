@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 
 export enum SaleStatus {
-  PENDING = 'pending',
   COMPLETED = 'completed',
   FAILED = 'failed',
 }
@@ -26,7 +25,7 @@ export class Sale {
   @Column({ type: 'varchar', length: 100, unique: true, nullable: false, name: 'saleReference' })
   saleReference: string;
 
-  @Column({ type: 'enum', enum: SaleStatus, default: SaleStatus.PENDING, nullable: false })
+  @Column({ type: 'enum', enum: SaleStatus, default: SaleStatus.FAILED, nullable: false })
   status: SaleStatus;
 
   @Column({ type: 'decimal', precision: 12, scale: 2, nullable: false })
