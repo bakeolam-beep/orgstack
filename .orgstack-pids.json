@@ -1,0 +1,32 @@
+[
+    {
+        "Name":  "auth-service",
+        "ProcessId":  21800,
+        "Port":  3001,
+        "Url":  "http://localhost:3001"
+    },
+    {
+        "Name":  "inventory-service",
+        "ProcessId":  23492,
+        "Port":  3002,
+        "Url":  "http://localhost:3002"
+    },
+    {
+        "Name":  "order-service",
+        "ProcessId":  10212,
+        "Port":  3003,
+        "Url":  "http://localhost:3003"
+    },
+    {
+        "Name":  "notification-service",
+        "ProcessId":  10960,
+        "Port":  3004,
+        "Url":  "http://localhost:3004"
+    },
+    {
+        "Name":  "client",
+        "ProcessId":  15920,
+        "Port":  5173,
+        "Url":  "http://localhost:5173"
+    }
+]
