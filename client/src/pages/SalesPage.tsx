@@ -180,12 +180,15 @@ export const Orders = () => {
       const response = await api.post(`${ORDER_API}/orders/verify-payment`, { paystackReference: reference });
       if (response.data.verified) {
         fetchData();
+        window.location.href = '/orders';
       } else {
         fetchData();
+        window.location.href = '/orders';
       }
     } catch (err: unknown) {
       console.error('Payment verification failed:', err);
       fetchData();
+      window.location.href = '/orders';
     }
   };
 

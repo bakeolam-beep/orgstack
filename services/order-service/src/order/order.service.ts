@@ -108,12 +108,12 @@ export class OrderService {
         }
       }
 
-      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.FAILED });
+      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.PENDING });
 
       return {
         saleId: savedSale.id,
         saleReference,
-        status: SaleStatus.FAILED,
+        status: SaleStatus.PENDING,
         totalAmount,
         paymentStatus: PaymentStatus.UNPAID,
         items: dto.items,
@@ -127,8 +127,8 @@ export class OrderService {
       if (!sale) {
         throw new NotFoundException('Sale not found');
       }
-      if (sale.status !== SaleStatus.FAILED && sale.status !== SaleStatus.COMPLETED) {
-        throw new BadRequestException('Sale must be failed or completed before payment');
+      if (sale.status !== SaleStatus.PENDING && sale.status !== SaleStatus.COMPLETED) {
+        throw new BadRequestException('Sale must be pending or completed before payment');
       }
       if (sale.paymentStatus === PaymentStatus.PAID) {
         throw new BadRequestException('Sale already paid');

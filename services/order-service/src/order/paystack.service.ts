@@ -19,10 +19,11 @@ export class PaystackService {
   }
 
   async initializePayment(email: string, amountInKobo: number, saleReference: string) {
+    const callbackUrl = process.env.PAYSTACK_CALLBACK_URL ?? 'http://localhost:5173/orders';
     const response = await firstValueFrom(
       this.httpService.post(
         `${this.baseUrl}/transaction/initialize`,
-        { email, amount: amountInKobo, reference: saleReference, callback_url: 'http://localhost:5173/orders' },
+        { email, amount: amountInKobo, reference: saleReference, callback_url: callbackUrl },
         {
           headers: {
             Authorization: `Bearer ${this.secretKey}`,
