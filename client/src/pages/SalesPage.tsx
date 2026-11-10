@@ -187,6 +187,13 @@ export const Orders = () => {
     }
   };
 
+  const getEffectivePaymentStatus = (saleStatus: string, paymentStatus: string): string => {
+    const s = saleStatus.toLowerCase();
+    if (s === 'completed') return 'paid';
+    if (s === 'failed') return 'unpaid';
+    return paymentStatus;
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -239,8 +246,8 @@ export const Orders = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${getPaymentStatusBadgeClass(order.paymentStatus)}`}>
-                        {order.paymentStatus}
+                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${getPaymentStatusBadgeClass(getEffectivePaymentStatus(order.status, order.paymentStatus))}`}>
+                        {getEffectivePaymentStatus(order.status, order.paymentStatus)}
                       </span>
                     </td>
                   </tr>
