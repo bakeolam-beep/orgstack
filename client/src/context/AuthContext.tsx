@@ -49,18 +49,51 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await api.post(`${AUTH_API}/auth/login`, { email, password });
-    const { access_token } = response.data;
-    const userData = decodeJWT(access_token);
+    let response: any;
+    try {
+      response = await api.post(`${AUTH_API}/auth/login`, { email, password });
+    } catch (err: unknown) {
+      const message = (err as any)?.response?.data?.message || 'Invalid email or password';
+      throw new Error(message);
+    }
+    const data = response?.data ?? {};
+    const token = data.access_token || data.accessToken || data.token;
+    const tenantId = data.tenantId || data.user?.tenantId;
+    if (!token) {
+      throw new Error('Login failed: Server did not return a valid authentication token.');
+    }
+    const userData = decodeJWT(token);
     if (!userData) throw new Error('Invalid token');
-    localStorage.setItem('token', access_token);
+    if (tenantId) userData.tenantId = tenantId;
+    localStorage.setItem('token', token);
+    localStorage.setItem('tenantId', tenantId || '');
     localStorage.setItem('user', JSON.stringify(userData));
-    setToken(access_token);
+    setToken(token);
     setUser(userData);
   };
 
   const register = async (businessName: string, adminEmail: string, adminPassword: string) => {
-    await api.post(`${AUTH_API}/auth/register`, { businessName, adminEmail, adminPassword });
+    let response: any;
+    try {
+      response = await api.post(`${AUTH_API}/auth/register`, { businessName, adminEmail, adminPassword });
+    } catch (err: unknown) {
+      const message = (err as any)?.response?.data?.message || 'Registration failed';
+      throw new Error(message);
+    }
+    const data = response?.data ?? {};
+    const token = data.access_token || data.accessToken || data.token;
+    const tenantId = data.tenantId || data.user?.tenantId;
+    if (token) {
+      const userData = decodeJWT(token);
+      if (userData) {
+        if (tenantId) userData.tenantId = tenantId;
+        localStorage.setItem('token', token);
+        localStorage.setItem('tenantId', tenantId || '');
+        localStorage.setItem('user', JSON.stringify(userData));
+        setToken(token);
+        setUser(userData);
+      }
+    }
     await login(adminEmail, adminPassword);
   };
 

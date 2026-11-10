@@ -88,6 +88,17 @@ export class InventoryService {
           reference: 'initial-stock',
         });
         await queryRunner.manager.save(movement);
+
+        if (dto.quantity <= savedProduct.reorderLevel) {
+          this.rabbitmqProducerService.publishLowStockEvent(
+            tenantId,
+            savedProduct.id,
+            savedProduct.name,
+            savedProduct.sku,
+            dto.quantity,
+            savedProduct.reorderLevel,
+          );
+        }
       }
 
       return savedProduct;
@@ -211,6 +222,7 @@ export class InventoryService {
           tenantId,
           product.id,
           product.name,
+          product.sku,
           newStock,
           product.reorderLevel,
         );

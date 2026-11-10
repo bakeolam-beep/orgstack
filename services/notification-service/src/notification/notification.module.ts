@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { PassportModule } from '@nestjs/passport';
@@ -25,6 +26,21 @@ import { JwtStrategy } from '../shared/auth/jwt.strategy.js';
         },
       }),
     }),
+    ClientsModule.registerAsync([
+      {
+        name: 'RABBITMQ_SERVICE',
+        imports: [ConfigModule],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL', 'amqp://localhost:5672')],
+            queue: 'low_stock_alerts',
+            queueOptions: { durable: true },
+          },
+        }),
+      },
+    ]),
   ],
   controllers: [NotificationController],
   providers: [

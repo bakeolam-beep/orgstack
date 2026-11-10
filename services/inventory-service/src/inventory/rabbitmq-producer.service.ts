@@ -7,8 +7,9 @@ export interface LowStockEventPayload {
   eventType: 'LOW_STOCK';
   tenantId: string;
   productId: string;
-  productName: string;
-  currentQuantity: number;
+  name: string;
+  sku: string;
+  currentStock: number;
   reorderLevel: number;
   timestamp: string;
 }
@@ -21,7 +22,8 @@ export class RabbitmqProducerService {
     tenantId: string,
     productId: string,
     productName: string,
-    currentQuantity: number,
+    sku: string,
+    currentStock: number,
     reorderLevel: number,
   ): void {
     const payload: LowStockEventPayload = {
@@ -29,8 +31,9 @@ export class RabbitmqProducerService {
       eventType: 'LOW_STOCK',
       tenantId,
       productId,
-      productName,
-      currentQuantity,
+      name: productName,
+      sku,
+      currentStock,
       reorderLevel,
       timestamp: new Date().toISOString(),
     };

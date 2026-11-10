@@ -16,6 +16,7 @@ export const Notifications = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [markingAllRead, setMarkingAllRead] = useState(false);
+  const [toggling, setToggling] = useState<Set<string>>(new Set());
 
   const fetchNotifications = async () => {
     setLoading(true);
@@ -35,15 +36,30 @@ export const Notifications = () => {
     fetchNotifications();
   }, []);
 
-  const markAsRead = async (id: string) => {
+  const markAsRead = async (id: string, isRead: boolean) => {
+    setToggling((prev) => new Set([...prev, id]));
     try {
-      await api.patch(`${NOTIFICATION_API}/notifications/${id}/mark-read`);
+      await api.patch(`${NOTIFICATION_API}/notifications/${id}/read`, { isRead });
       setNotifications((prev) =>
-        prev.map((n) => (n.id === id ? { ...n, isRead: true } : n))
+        prev.map((n) => (n.id === id ? { ...n, isRead } : n))
       );
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to mark as read';
+      const message =
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.data &&
+        (err as any).response.data.message
+          ? (err as any).response.data.message
+          : err instanceof Error
+            ? err.message
+            : `Failed to mark as ${isRead ? 'read' : 'unread'}`;
       alert(message);
+    } finally {
+      setToggling((prev) => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -53,7 +69,15 @@ export const Notifications = () => {
       await api.patch(`${NOTIFICATION_API}/notifications/mark-all-read`);
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to mark all as read';
+      const message =
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.data &&
+        (err as any).response.data.message
+          ? (err as any).response.data.message
+          : err instanceof Error
+            ? err.message
+            : 'Failed to mark all as read';
       alert(message);
     } finally {
       setMarkingAllRead(false);
@@ -78,6 +102,14 @@ export const Notifications = () => {
     }
   };
 
+  const readStatusBadge = (isRead: boolean) => (
+    <span
+      className={`px-2 py-0.5 rounded-full text-xs font-bold ${isRead ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+    >
+      {isRead ? 'Read' : 'Unread'}
+    </span>
+  );
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -85,17 +117,17 @@ export const Notifications = () => {
           <h1 className="text-2xl font-bold text-slate-900">Notifications</h1>
           <p className="text-slate-500">Stay updated on your store activity.</p>
         </div>
-      </div>
 
-      {notifications.some((n) => !n.isRead) && (
-        <button
-          onClick={markAllAsRead}
-          disabled={markingAllRead}
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700 flex items-center gap-2"
-        >
-          {markingAllRead ? 'Marking...' : 'Mark All as Read'}
-        </button>
-      )}
+        {notifications.some((n) => !n.isRead) && (
+          <button
+            onClick={markAllAsRead}
+            disabled={markingAllRead}
+            className="px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-60"
+          >
+            {markingAllRead ? 'Marking...' : 'Mark All as Read'}
+          </button>
+        )}
+      </div>
 
       {error && (
         <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-700 text-sm">
@@ -118,10 +150,7 @@ export const Notifications = () => {
             notifications.map((notification) => (
               <div
                 key={notification.id}
-                className={`flex items-start gap-3 p-6 border-b border-slate-100 hover:bg-slate-50 transition-colors last:border-0 ${!notification.isRead ? 'bg-blue-50' : ''}`}
-                onClick={() => !notification.isRead && markAsRead(notification.id)}
-                role="button"
-                tabIndex={0}
+                className={`flex items-start gap-3 p-6 border-b border-slate-100 hover:bg-slate-50 transition-colors last:border-0 ${!notification.isRead ? 'bg-blue-50' : 'bg-white'}`}
               >
                 <div className="flex-shrink-0 text-lg mt-0.5">
                   {getTypeIcon(notification.type)}
@@ -132,13 +161,22 @@ export const Notifications = () => {
                     <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${getTypeBadgeClass(notification.type)}`}>
                       {notification.type.replace('_', ' ')}
                     </span>
+                    {readStatusBadge(notification.isRead)}
                   </div>
                   <p className="text-sm text-slate-600 mb-1">{notification.message}</p>
                   <span className="text-xs text-slate-400">{new Date(notification.createdAt).toLocaleString()}</span>
                 </div>
-                {!notification.isRead && (
-                  <div className="w-2 h-2 bg-blue-600 rounded-full flex-shrink-0 mt-0.5" />
-                )}
+                <button
+                  onClick={() => markAsRead(notification.id, !notification.isRead)}
+                  disabled={toggling.has(notification.id)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
+                    notification.isRead
+                      ? 'text-indigo-600 hover:bg-indigo-50'
+                      : 'text-red-600 hover:bg-red-50'
+                  }`}
+                >
+                  {notification.isRead ? 'Mark Unread' : 'Mark Read'}
+                </button>
               </div>
             ))
           )}

@@ -108,12 +108,12 @@ export class OrderService {
         }
       }
 
-      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.COMPLETED });
+      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.PENDING });
 
       return {
         saleId: savedSale.id,
         saleReference,
-        status: SaleStatus.COMPLETED,
+        status: SaleStatus.PENDING,
         totalAmount,
         paymentStatus: PaymentStatus.UNPAID,
         items: dto.items,
@@ -127,8 +127,8 @@ export class OrderService {
       if (!sale) {
         throw new NotFoundException('Sale not found');
       }
-      if (sale.status !== SaleStatus.COMPLETED) {
-        throw new BadRequestException('Sale must be completed before payment');
+      if (sale.status !== SaleStatus.PENDING && sale.status !== SaleStatus.COMPLETED) {
+        throw new BadRequestException('Sale must be pending or completed before payment');
       }
       if (sale.paymentStatus === PaymentStatus.PAID) {
         throw new BadRequestException('Sale already paid');
@@ -156,9 +156,10 @@ export class OrderService {
 
       const verified = await this.paystackService.verifyPayment(dto.paystackReference);
       if (verified.verified) {
-        await queryRunner.manager.update(Sale, { id: sale.id }, { paymentStatus: PaymentStatus.PAID });
+        await queryRunner.manager.update(Sale, { id: sale.id }, { status: SaleStatus.COMPLETED, paymentStatus: PaymentStatus.PAID });
         return { saleReference: sale.saleReference, paymentStatus: PaymentStatus.PAID, verified: true };
       }
+      await queryRunner.manager.update(Sale, { id: sale.id }, { status: SaleStatus.FAILED, paymentStatus: PaymentStatus.UNPAID });
       return { saleReference: sale.saleReference, paymentStatus: PaymentStatus.UNPAID, verified: false };
     });
   }
@@ -233,13 +234,13 @@ export class OrderService {
   async getSalesSummary(tenantId: string) {
     return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
       const sales = await queryRunner.manager.find(Sale);
-      const completedSales = sales.filter((s: Sale) => s.status === SaleStatus.COMPLETED);
       const paidSales = sales.filter((s: Sale) => s.paymentStatus === PaymentStatus.PAID);
+      const pendingSales = sales.filter((s: Sale) => s.status === SaleStatus.PENDING);
       const totalRevenue = paidSales.reduce((sum: number, s: Sale) => sum + Number(s.totalAmount ?? 0), 0);
       return {
-        totalSales: completedSales.length,
+        totalSales: paidSales.length,
         totalRevenue,
-        pendingPayments: completedSales.filter((s: Sale) => s.paymentStatus !== PaymentStatus.PAID).length,
+        pendingPayments: pendingSales.length,
       };
     });
   }

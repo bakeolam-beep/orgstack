@@ -16,14 +16,13 @@ import { TenantConnectionService } from '../shared/database/tenant-connection.se
 import { DataSource, QueryRunner } from 'typeorm';
 
 interface LowStockEventPayload {
-  eventId: string;
-  eventType: 'LOW_STOCK';
   tenantId: string;
   productId: string;
-  productName: string;
-  currentQuantity: number;
+  name: string;
+  sku: string;
+  currentStock: number;
   reorderLevel: number;
-  timestamp: string;
+  timestamp?: string;
 }
 
 @Controller('notifications')
@@ -76,12 +75,11 @@ export class NotificationController {
   @EventPattern('low_stock_alerts')
   async handleLowStockEvent(@Payload() payload: LowStockEventPayload, @Ctx() context: RmqContext): Promise<void> {
     const requiredFields: (keyof LowStockEventPayload)[] = [
-      'eventId',
-      'eventType',
       'tenantId',
       'productId',
-      'productName',
-      'currentQuantity',
+      'name',
+      'sku',
+      'currentStock',
       'reorderLevel',
     ];
 
@@ -95,42 +93,32 @@ export class NotificationController {
       return;
     }
 
-    if (payload.eventType !== 'LOW_STOCK') {
-      console.warn(`Received unexpected event type: ${payload.eventType}. Expected LOW_STOCK.`);
-      const channel = context.getChannelRef();
-      const originalMsg = context.getMessage();
-      channel.ack(originalMsg);
-      return;
-    }
-
-    const { eventId, tenantId, productId, productName, currentQuantity, reorderLevel } = payload;
+    const { tenantId, productId, name, sku, currentStock, reorderLevel } = payload;
 
     try {
-      await this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner: QueryRunner) => {
-        const insertSql = `
-          INSERT INTO "notifications" (type, title, message, metadata, "isRead", "createdAt")
-          VALUES ($1, $2, $3, $4, $5, CURRENT_TIMESTAMP)
-        `;
+      await this.notificationService.createNotification(
+        tenantId,
+        'LOW_STOCK',
+        'Low Stock Alert',
+        `${name} (SKU: ${sku}) has fallen to ${currentStock} units, which is at or below the reorder level of ${reorderLevel}.`,
+        { productId, productName: name, currentStock, reorderLevel },
+      );
 
-        const message = `${productName} (SKU: ${productId}) has fallen to ${currentQuantity} units, which is at or below the reorder level of ${reorderLevel}.`;
-
-        await queryRunner.query(insertSql, [
-          'LOW_STOCK',
-          'Low Stock Alert',
-          message,
-          JSON.stringify({ productId, productName, currentQuantity, reorderLevel }),
-          false,
-        ]);
-      });
-
-      console.log(`Successfully processed low stock event ${eventId} for tenant ${tenantId}`);
+      console.log(`Successfully processed low stock event for tenant ${tenantId}, product ${productId}`);
     } catch (error) {
-      console.error(`Failed to process low stock event ${eventId} for tenant ${tenantId}: ${error}`);
+      console.error(`Failed to process low stock event for tenant ${tenantId}, product ${productId}: ${error}`);
       throw error;
     } finally {
       const channel = context.getChannelRef();
       const originalMsg = context.getMessage();
       channel.ack(originalMsg);
     }
+  }
+
+  @Patch(':id/read')
+  @UseGuards(JwtAuthGuard)
+  async toggleRead(@Req() req: any, @Param('id') id: string, @Body() dto: { isRead: boolean }): Promise<{ updated: number }> {
+    const tenantId = req.user.tenantId;
+    return this.notificationService.toggleRead(tenantId, id, dto.isRead);
   }
 }

@@ -91,6 +91,17 @@ export class NotificationService implements OnModuleInit {
     });
   }
 
+  async toggleRead(tenantId: string, id: string, isRead: boolean): Promise<{ updated: number }> {
+    await this.ensureTenantSchema(tenantId);
+    return this.tenantConnectionService.withTenantScope(tenantId, async (queryRunner: QueryRunner) => {
+      const result = await queryRunner.query(
+        `UPDATE "notifications" SET "isRead" = $1 WHERE id = $2`,
+        [isRead, id],
+      );
+      return { updated: result?.rowCount || result?.[1] || 0 };
+    });
+  }
+
   async createNotification(
     tenantId: string,
     type: string,
