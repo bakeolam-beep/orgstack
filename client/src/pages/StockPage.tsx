@@ -37,8 +37,8 @@ const StockPage = () => {
     setError('');
     try {
       const [stockRes, productsRes] = await Promise.all([
-        api.get(`${INVENTORY_API}/inventory/stock-summary`),
-        api.get(`${INVENTORY_API}/inventory/products`),
+        api.get(`${INVENTORY_API}/stock-summary`),
+        api.get(`${INVENTORY_API}/products`),
       ]);
       setStockItems(stockRes.data || []);
       setProducts(productsRes.data || []);
@@ -78,7 +78,7 @@ const StockPage = () => {
     };
 
     try {
-      await api.post(`${INVENTORY_API}/inventory/stock-movements`, payload);
+      await api.post(`${INVENTORY_API}/stock-movements`, payload);
       closeModal();
       fetchData();
     } catch (err: unknown) {

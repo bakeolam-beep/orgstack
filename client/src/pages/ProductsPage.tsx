@@ -37,7 +37,7 @@ export const Inventory = () => {
   const fetchProducts = async () => {
     setError('');
     try {
-      const response = await api.get(`${INVENTORY_API}/inventory/products`);
+      const response = await api.get(`${INVENTORY_API}/products`);
       setProducts(response.data || []);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to fetch products';
@@ -92,9 +92,9 @@ export const Inventory = () => {
 
     try {
       if (editingProduct) {
-        await api.patch(`${INVENTORY_API}/inventory/products/${editingProduct.id}`, payload);
+        await api.patch(`${INVENTORY_API}/products/${editingProduct.id}`, payload);
       } else {
-        await api.post(`${INVENTORY_API}/inventory/products`, payload);
+        await api.post(`${INVENTORY_API}/products`, payload);
       }
       closeModal();
       fetchProducts();
@@ -110,7 +110,7 @@ export const Inventory = () => {
     if (!window.confirm(`Are you sure you want to delete "${product.name}"?`)) return;
 
     try {
-      await api.delete(`${INVENTORY_API}/inventory/products/${product.id}`);
+      await api.delete(`${INVENTORY_API}/products/${product.id}`);
       fetchProducts();
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to delete product';

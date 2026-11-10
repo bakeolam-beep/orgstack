@@ -46,8 +46,8 @@ export const Orders = () => {
     setError('');
     try {
       const [ordersRes, productsRes] = await Promise.all([
-        api.get(`${ORDER_API}/orders`),
-        api.get(`${INVENTORY_API}/inventory/products`),
+        api.get(`${ORDER_API}`),
+        api.get(`${INVENTORY_API}/products`),
       ]);
       setOrders(ordersRes.data || []);
       setProducts(productsRes.data || []);
@@ -128,7 +128,7 @@ export const Orders = () => {
     };
 
     try {
-      const response = await api.post(`${ORDER_API}/orders`, payload);
+      const response = await api.post(`${ORDER_API}`, payload);
       const saleReference = response.data.saleReference;
       setLastSaleRef(saleReference);
       setPayUrl(null);
@@ -154,7 +154,7 @@ export const Orders = () => {
     setPaymentLoading(true);
     try {
       const email = user?.email || '';
-      const response = await api.post(`${ORDER_API}/orders/${lastSaleRef}/pay`, { email });
+      const response = await api.post(`${ORDER_API}/${lastSaleRef}/pay`, { email });
       if (response.data.authorizationUrl) {
         setPayUrl(response.data.authorizationUrl);
         window.location.href = response.data.authorizationUrl;
@@ -177,7 +177,7 @@ export const Orders = () => {
 
   const verifyPayment = async (reference: string) => {
     try {
-      const response = await api.post(`${ORDER_API}/orders/verify-payment`, { paystackReference: reference });
+      const response = await api.post(`${ORDER_API}/verify-payment`, { paystackReference: reference });
       if (response.data.verified) {
         fetchData();
         window.location.href = '/orders';

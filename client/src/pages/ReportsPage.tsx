@@ -37,8 +37,8 @@ const ReportsPage = () => {
     setError('');
     try {
       const [stockRes, orderRes] = await Promise.all([
-        api.get(`${INVENTORY_API}/inventory/stock-summary`),
-        api.get(`${ORDER_API}/orders/summary`),
+        api.get(`${INVENTORY_API}/stock-summary`),
+        api.get(`${ORDER_API}/summary`),
       ]);
       setStockItems(stockRes.data || []);
       setOrderSummary(orderRes.data || { totalSales: 0, totalRevenue: 0, pendingPayments: 0 });

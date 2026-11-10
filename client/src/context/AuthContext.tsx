@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const login = async (email: string, password: string) => {
     let response: any;
     try {
-      response = await api.post(`${AUTH_API}/auth/login`, { email, password });
+      response = await api.post(`${AUTH_API}/login`, { email, password });
     } catch (err: unknown) {
       const message = (err as any)?.response?.data?.message || 'Invalid email or password';
       throw new Error(message);
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (businessName: string, adminEmail: string, adminPassword: string) => {
     let response: any;
     try {
-      response = await api.post(`${AUTH_API}/auth/register`, { businessName, adminEmail, adminPassword });
+      response = await api.post(`${AUTH_API}/register`, { businessName, adminEmail, adminPassword });
     } catch (err: unknown) {
       const message = (err as any)?.response?.data?.message || 'Registration failed';
       throw new Error(message);

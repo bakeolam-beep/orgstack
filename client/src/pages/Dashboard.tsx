@@ -52,7 +52,7 @@ export const Dashboard = () => {
     let fetchError = false;
 
     try {
-      const stockRes = await api.get(`${INVENTORY_API}/inventory/stock-summary`);
+      const stockRes = await api.get(`${INVENTORY_API}/stock-summary`);
       stockData = stockRes.data || [];
     } catch {
       fetchError = true;
@@ -60,7 +60,7 @@ export const Dashboard = () => {
     }
 
     try {
-      const orderRes = await api.get(`${ORDER_API}/orders/summary`);
+      const orderRes = await api.get(`${ORDER_API}/summary`);
       orderData = orderRes.data || { totalSales: 0, totalRevenue: 0, pendingPayments: 0 };
     } catch {
       fetchError = true;
@@ -68,7 +68,7 @@ export const Dashboard = () => {
     }
 
     try {
-      const notifRes = await api.get(`${NOTIFICATION_API}/notifications`);
+      const notifRes = await api.get(`${NOTIFICATION_API}`);
       notifData = notifRes.data || [];
     } catch {
       fetchError = true;

@@ -22,7 +22,7 @@ export const Notifications = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await api.get(`${NOTIFICATION_API}/notifications`);
+      const response = await api.get(`${NOTIFICATION_API}`);
       setNotifications(response.data || []);
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Failed to fetch notifications';
@@ -39,7 +39,7 @@ export const Notifications = () => {
   const markAsRead = async (id: string, isRead: boolean) => {
     setToggling((prev) => new Set([...prev, id]));
     try {
-      await api.patch(`${NOTIFICATION_API}/notifications/${id}/read`, { isRead });
+      await api.patch(`${NOTIFICATION_API}/${id}/read`, { isRead });
       setNotifications((prev) =>
         prev.map((n) => (n.id === id ? { ...n, isRead } : n))
       );
@@ -66,7 +66,7 @@ export const Notifications = () => {
   const markAllAsRead = async () => {
     setMarkingAllRead(true);
     try {
-      await api.patch(`${NOTIFICATION_API}/notifications/mark-all-read`);
+      await api.patch(`${NOTIFICATION_API}/mark-all-read`);
       setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
     } catch (err: unknown) {
       const message =
