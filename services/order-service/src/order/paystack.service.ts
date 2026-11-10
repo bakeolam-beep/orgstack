@@ -22,7 +22,7 @@ export class PaystackService {
     const response = await firstValueFrom(
       this.httpService.post(
         `${this.baseUrl}/transaction/initialize`,
-        { email, amount: amountInKobo, reference: saleReference },
+        { email, amount: amountInKobo, reference: saleReference, callback_url: 'http://localhost:5173/orders' },
         {
           headers: {
             Authorization: `Bearer ${this.secretKey}`,

@@ -59,6 +59,12 @@ export const Orders = () => {
 
   useEffect(() => {
     fetchData();
+    const params = new URLSearchParams(window.location.search);
+    const reference = params.get('reference') || params.get('trxref');
+    if (reference) {
+      verifyPayment(reference);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, []);
 
   const openModal = () => {
@@ -166,6 +172,20 @@ export const Orders = () => {
       alert(message);
     } finally {
       setPaymentLoading(false);
+    }
+  };
+
+  const verifyPayment = async (reference: string) => {
+    try {
+      const response = await api.post(`${ORDER_API}/orders/verify-payment`, { paystackReference: reference });
+      if (response.data.verified) {
+        fetchData();
+      } else {
+        fetchData();
+      }
+    } catch (err: unknown) {
+      console.error('Payment verification failed:', err);
+      fetchData();
     }
   };
 

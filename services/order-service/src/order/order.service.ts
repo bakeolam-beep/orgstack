@@ -108,12 +108,12 @@ export class OrderService {
         }
       }
 
-      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.PENDING });
+      await queryRunner.manager.update(Sale, { id: savedSale.id }, { status: SaleStatus.FAILED });
 
       return {
         saleId: savedSale.id,
         saleReference,
-        status: SaleStatus.PENDING,
+        status: SaleStatus.FAILED,
         totalAmount,
         paymentStatus: PaymentStatus.UNPAID,
         items: dto.items,
@@ -127,8 +127,8 @@ export class OrderService {
       if (!sale) {
         throw new NotFoundException('Sale not found');
       }
-      if (sale.status !== SaleStatus.PENDING && sale.status !== SaleStatus.COMPLETED) {
-        throw new BadRequestException('Sale must be pending or completed before payment');
+      if (sale.status !== SaleStatus.FAILED && sale.status !== SaleStatus.COMPLETED) {
+        throw new BadRequestException('Sale must be failed or completed before payment');
       }
       if (sale.paymentStatus === PaymentStatus.PAID) {
         throw new BadRequestException('Sale already paid');
@@ -198,7 +198,7 @@ export class OrderService {
           await this.withScope(tenantId, async (qr: import("typeorm").QueryRunner) => {
             const sale = await qr.manager.findOne(Sale, { where: { paystackReference: reference } });
             if (sale && sale.paymentStatus !== PaymentStatus.PAID) {
-              await qr.manager.update(Sale, { id: sale.id }, { paymentStatus: PaymentStatus.PAID });
+              await qr.manager.update(Sale, { id: sale.id }, { status: SaleStatus.COMPLETED, paymentStatus: PaymentStatus.PAID });
             }
           });
         } catch {}
