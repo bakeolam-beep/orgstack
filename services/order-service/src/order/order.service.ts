@@ -164,6 +164,28 @@ export class OrderService {
     });
   }
 
+  async verifyPaymentByReference(tenantId: string, reference: string) {
+    return this.withScope(tenantId, async (queryRunner: import("typeorm").QueryRunner) => {
+      const sale = await queryRunner.manager.findOne(Sale, { where: { paystackReference: reference } });
+      if (!sale) {
+        throw new NotFoundException('Sale not found');
+      }
+
+      if (sale.paymentStatus === PaymentStatus.PAID) {
+        return { status: 'success', message: 'Payment already verified', order: sale };
+      }
+
+      const verified = await this.paystackService.verifyPayment(reference);
+      if (verified.verified) {
+        await queryRunner.manager.update(Sale, { id: sale.id }, { status: SaleStatus.COMPLETED, paymentStatus: PaymentStatus.PAID });
+        const updatedOrder = await queryRunner.manager.findOne(Sale, { where: { id: sale.id } });
+        return { status: 'success', message: 'Payment verified', order: updatedOrder };
+      }
+      await queryRunner.manager.update(Sale, { id: sale.id }, { status: SaleStatus.FAILED, paymentStatus: PaymentStatus.UNPAID });
+      return { status: 'failed', message: 'Payment verification failed', order: sale };
+    });
+  }
+
   async handlePaystackWebhook(payload: any, signature: string) {
     const secret = process.env.PAYSTACK_SECRET_KEY;
     if (!secret) {

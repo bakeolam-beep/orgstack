@@ -38,6 +38,13 @@ export class OrderController {
     return this.orderService.verifyPayment(req.user.tenantId, dto);
   }
 
+  @Get('verify/:reference')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async verifyPaymentByReference(@Req() req: AuthenticatedRequest, @Param('reference') reference: string) {
+    return this.orderService.verifyPaymentByReference(req.user.tenantId, reference);
+  }
+
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
   async handleWebhook(@Req() req: AuthenticatedRequest) {

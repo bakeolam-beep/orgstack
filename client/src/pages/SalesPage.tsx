@@ -59,11 +59,15 @@ export const Orders = () => {
 
   useEffect(() => {
     fetchData();
-    const params = new URLSearchParams(window.location.search);
-    const reference = params.get('reference') || params.get('trxref');
-    if (reference) {
-      verifyPayment(reference);
-      window.history.replaceState({}, document.title, window.location.pathname);
+    const searchParams = new URLSearchParams(window.location.search);
+    const ref = searchParams.get('reference') || searchParams.get('trxref');
+    if (ref) {
+      api.get(`/orders/verify/${ref}`)
+        .then(() => {
+          window.history.replaceState({}, document.title, window.location.pathname);
+          fetchData();
+        })
+        .catch((err) => console.error('Verification failed', err));
     }
   }, []);
 
