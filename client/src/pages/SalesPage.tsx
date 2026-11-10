@@ -62,12 +62,7 @@ export const Orders = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const ref = searchParams.get('reference') || searchParams.get('trxref');
     if (ref) {
-      api.get(`/orders/verify/${ref}`)
-        .then(() => {
-          window.history.replaceState({}, document.title, window.location.pathname);
-          fetchData();
-        })
-        .catch((err) => console.error('Verification failed', err));
+      verifyPayment(ref);
     }
   }, []);
 
