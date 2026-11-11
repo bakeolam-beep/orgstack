@@ -155,10 +155,10 @@ foreach ($svc in $microservices) {
     }
 }
 
-# Start client (npm run dev in background)
+# Start client (vite dev server in background)
 $clientPort = $servicePorts["client"]
 Write-Host "  Starting client on port $clientPort..."
-$clientProcess = Start-Process -FilePath "npm" -ArgumentList "run dev" -WorkingDirectory $clientDir -PassThru -WindowStyle Hidden
+$clientProcess = Start-Process -FilePath "cmd" -ArgumentList "/c npx vite --port $clientPort" -WorkingDirectory $clientDir -PassThru -WindowStyle Hidden
 $serviceProcesses += [PSCustomObject]@{
     Name      = "client"
     ProcessId = $clientProcess.Id
@@ -171,6 +171,10 @@ $pidFile = Join-Path $rootDir ".orgstack-pids.json"
 $serviceProcesses | ConvertTo-Json -Depth 3 | Set-Content $pidFile
 
 Write-Host "  All services started." -ForegroundColor Green
+
+# Give Vite dev server a few seconds to start before health checks
+Write-Host "  Waiting for services to fully initialize..." -ForegroundColor Yellow
+Start-Sleep -Seconds 8
 
 # ---------------------------------------------------------------------------
 # Step 5: Verify health responses

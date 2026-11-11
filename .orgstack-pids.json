@@ -1,31 +1,31 @@
 [
     {
         "Name":  "auth-service",
-        "ProcessId":  16684,
+        "ProcessId":  18308,
         "Port":  3001,
         "Url":  "http://localhost:3001"
     },
     {
         "Name":  "inventory-service",
-        "ProcessId":  17200,
+        "ProcessId":  8800,
         "Port":  3002,
         "Url":  "http://localhost:3002"
     },
     {
         "Name":  "order-service",
-        "ProcessId":  18020,
+        "ProcessId":  11824,
         "Port":  3003,
         "Url":  "http://localhost:3003"
     },
     {
         "Name":  "notification-service",
-        "ProcessId":  17488,
+        "ProcessId":  16772,
         "Port":  3004,
         "Url":  "http://localhost:3004"
     },
     {
         "Name":  "client",
-        "ProcessId":  16056,
+        "ProcessId":  9552,
         "Port":  5173,
         "Url":  "http://localhost:5173"
     }
