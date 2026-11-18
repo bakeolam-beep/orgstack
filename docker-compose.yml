@@ -45,17 +45,20 @@ services:
       - "3001:3001"
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://orgstack_mq:orgstack_mq_pass@rabbitmq:5672
+      AUTH_SERVICE_URL: http://auth-service:3001
+      INVENTORY_SERVICE_URL: http://inventory-service:3002
+      ORDER_SERVICE_URL: http://order-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/', (r) => { if (r.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   inventory-service:
     build:
@@ -67,17 +70,20 @@ services:
       - "3002:3002"
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://orgstack_mq:orgstack_mq_pass@rabbitmq:5672
+      AUTH_SERVICE_URL: http://auth-service:3001
+      INVENTORY_SERVICE_URL: http://inventory-service:3002
+      ORDER_SERVICE_URL: http://order-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3002/', (r) => { if (r.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   order-service:
     build:
@@ -89,17 +95,20 @@ services:
       - "3003:3003"
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://orgstack_mq:orgstack_mq_pass@rabbitmq:5672
+      AUTH_SERVICE_URL: http://auth-service:3001
+      INVENTORY_SERVICE_URL: http://inventory-service:3002
+      ORDER_SERVICE_URL: http://order-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3003/', (r) => { if (r.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   notification-service:
     build:
@@ -111,17 +120,20 @@ services:
       - "3004:3004"
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_URL: amqp://orgstack_mq:orgstack_mq_pass@rabbitmq:5672
+      AUTH_SERVICE_URL: http://auth-service:3001
+      INVENTORY_SERVICE_URL: http://inventory-service:3002
+      ORDER_SERVICE_URL: http://order-service:3003
+      NOTIFICATION_SERVICE_URL: http://notification-service:3004
     depends_on:
       postgres:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3004/', (r) => { if (r.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
 
   client:
     build:
@@ -132,20 +144,10 @@ services:
     ports:
       - "5173:5173"
     depends_on:
-      auth-service:
-        condition: service_healthy
-      inventory-service:
-        condition: service_healthy
-      order-service:
-        condition: service_healthy
-      notification-service:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "node", "-e", "require('http').get('http://localhost:5173/', (r) => { if (r.statusCode === 200) process.exit(0); else process.exit(1); }).on('error', () => process.exit(1))"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-      start_period: 10s
+      - auth-service
+      - inventory-service
+      - order-service
+      - notification-service
 
 volumes:
   postgres_data:
