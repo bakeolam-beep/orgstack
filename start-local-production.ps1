@@ -155,10 +155,10 @@ foreach ($svc in $microservices) {
     }
 }
 
-# Start client (vite dev server in background)
+# Start client (vite dev server in background, always fresh - never a stale dist bundle)
 $clientPort = $servicePorts["client"]
 Write-Host "  Starting client on port $clientPort..."
-$clientProcess = Start-Process -FilePath "cmd" -ArgumentList "/c npx vite --port $clientPort" -WorkingDirectory $clientDir -PassThru -WindowStyle Hidden
+$clientProcess = Start-Process -FilePath "cmd" -ArgumentList "/c npm run dev -- --host --port $clientPort" -WorkingDirectory $clientDir -PassThru -WindowStyle Hidden
 $serviceProcesses += [PSCustomObject]@{
     Name      = "client"
     ProcessId = $clientProcess.Id

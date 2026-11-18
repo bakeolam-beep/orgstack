@@ -37,6 +37,7 @@ export const Orders = () => {
   const [lastSaleRef, setLastSaleRef] = useState<string | null>(null);
   const [payUrl, setPayUrl] = useState<string | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [verificationBanner, setVerificationBanner] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-NG', { style: 'currency', currency: 'NGN' }).format(amount);
@@ -175,19 +176,39 @@ export const Orders = () => {
   };
 
   const verifyPayment = async (reference: string) => {
+    const token = localStorage.getItem('token') || localStorage.getItem('accessToken');
     try {
-      const response = await api.post(`${ORDER_API}/verify-payment`, { paystackReference: reference });
-      if (response.data.verified) {
-        fetchData();
-        window.location.href = '/orders';
+      const response = await api.post(
+        `${ORDER_API}/verify-payment`,
+        { paystackReference: reference },
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
+      );
+      if (response.data?.verified) {
+        setVerificationBanner({ type: 'success', text: 'Payment verified successfully.' });
       } else {
-        fetchData();
-        window.location.href = '/orders';
+        setVerificationBanner({
+          type: 'error',
+          text: 'Payment could not be verified. Please try again or contact support.',
+        });
       }
     } catch (err: unknown) {
+      const message =
+        err instanceof Error &&
+        (err as any).response &&
+        (err as any).response.data &&
+        (err as any).response.data.message
+          ? (err as any).response.data.message
+          : err instanceof Error
+            ? err.message
+            : 'Payment verification failed';
       console.error('Payment verification failed:', err);
+      setVerificationBanner({ type: 'error', text: `Payment verification failed: ${message}` });
+    } finally {
       fetchData();
-      window.location.href = '/orders';
+      const url = new URL(window.location.href);
+      url.searchParams.delete('reference');
+      url.searchParams.delete('trxref');
+      window.history.replaceState({}, '', `${url.pathname}${url.search}`);
     }
   };
 
@@ -228,6 +249,18 @@ export const Orders = () => {
           <span className="text-sm">+</span> New Sale
         </button>
       </div>
+
+      {verificationBanner && (
+        <div
+          className={`rounded-xl border p-4 text-sm ${
+            verificationBanner.type === 'success'
+              ? 'bg-green-50 border-green-200 text-green-700'
+              : 'bg-red-50 border-red-200 text-red-700'
+          }`}
+        >
+          {verificationBanner.text}
+        </div>
+      )}
 
       {error && (
         <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-700 text-sm">

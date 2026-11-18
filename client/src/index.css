@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@root {
+:root {
   --color-primary: #3b82f6;
   --color-primary-hover: #2563eb;
   --color-success: #10b981;

@@ -143,6 +143,11 @@ services:
     restart: unless-stopped
     ports:
       - "5173:5173"
+    environment:
+      AUTH_PROXY_TARGET: http://auth-service:3001
+      INVENTORY_PROXY_TARGET: http://inventory-service:3002
+      ORDER_PROXY_TARGET: http://order-service:3003
+      NOTIFICATION_PROXY_TARGET: http://notification-service:3004
     depends_on:
       - auth-service
       - inventory-service
